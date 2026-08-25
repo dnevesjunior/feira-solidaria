@@ -211,7 +211,7 @@ Não deixe isso morrer em mensagem de commit.
 | # | Epic | Estado |
 |---|---|---|
 | 0 | Fundação | implementado (ago/2026) |
-| 1 | Empreendimento e vitrine | especificado |
+| 1 | Empreendimento e vitrine | implementado (ago/2026) — pendente teste em celular real |
 | 2 | Catálogo com capacidade declarada | especificado |
 | 3 | Roteamento de pedido | especificado — **fim da v1** |
 | 4 | Pedido coletivo | a especificar |

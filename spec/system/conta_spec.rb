@@ -8,7 +8,7 @@ RSpec.describe "Minha conta", type: :system do
     fill_in "Seu telefone (o do WhatsApp)", with: "(13) 90000-0003"
     fill_in "Sua senha", with: "feira1234"
     click_button "Entrar"
-    expect(page).to have_content("Aparecida Ferreira")
+    expect(page).to have_content("Olá, Aparecida")
 
     click_link "Minha conta"
     fill_in "Senha atual", with: "feira1234"
@@ -23,6 +23,6 @@ RSpec.describe "Minha conta", type: :system do
     fill_in "Seu telefone (o do WhatsApp)", with: "13900000003"
     fill_in "Sua senha", with: "bolo de fubá quente"
     click_button "Entrar"
-    expect(page).to have_content("Aparecida Ferreira")
+    expect(page).to have_content("Olá, Aparecida")
   end
 end

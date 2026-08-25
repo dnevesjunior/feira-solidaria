@@ -87,3 +87,44 @@ button.link {
 .ajuda { color: #444; font-size: 1rem; }
 .dados dt { font-weight: 600; margin-top: 0.5rem; }
 .dados dd { margin: 0; }
+
+/* ---------- Epic 1: hub, vitrine, minha loja ---------- */
+.visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.destaque { font-size: 1.25rem; font-weight: 600; }
+.botao-secundario { background: #fff; color: var(--primaria); border: 2px solid var(--primaria); }
+.acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1rem 0; }
+.acoes form { display: inline; }
+
+.proxima-feira { border: 2px solid var(--primaria); border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; }
+.proxima-feira h2 { margin-top: 0; }
+
+.busca { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.busca input[type="search"] { flex: 1; font-size: 1.125rem; padding: 0.75rem; border: 2px solid var(--borda); border-radius: 6px; }
+
+.cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.card { display: flex; gap: 0.75rem; align-items: center; padding: 0.5rem; border: 1px solid var(--borda); border-radius: 8px; text-decoration: none; color: var(--texto); background: #fff; }
+.card img, .card-sem-foto { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex: none; }
+.card-sem-foto { display: grid; place-items: center; background: var(--primaria); color: #fff; font-size: 2rem; font-weight: 700; }
+.card-texto { display: flex; flex-direction: column; gap: 0.15rem; }
+.card-texto strong { font-size: 1.125rem; }
+.regra-ordem code { font-size: 0.9rem; }
+
+.vitrine .capa { width: 100%; height: auto; border-radius: 8px; }
+.vitrine-cabecalho { display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; margin: 1rem 0; }
+.vitrine .perfil { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; }
+.vitrine .descricao { font-size: 1.125rem; margin: 0; }
+.conteudo-vitrine img { max-width: 100%; height: auto; border-radius: 8px; }
+.conteudo-vitrine figure { margin: 1rem 0; }
+.conteudo-vitrine figcaption { font-size: 0.95rem; color: #444; }
+.conteudo-vitrine blockquote { border-left: 4px solid var(--primaria); margin: 1rem 0; padding: 0.25rem 1rem; }
+.conteudo-vitrine cite { font-style: normal; color: #444; }
+.contato { margin-top: 2rem; border-top: 2px solid var(--primaria); padding-top: 1rem; }
+
+.lista-simples { list-style: none; padding: 0; }
+.lista-simples li { padding: 0.5rem 0; border-bottom: 1px solid #ddd; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.prefixo { display: flex; align-items: center; gap: 0.25rem; }
+.prefixo span { color: #444; font-size: 0.95rem; }
+
+.editor { min-height: 12rem; border: 2px solid var(--borda); border-radius: 6px; padding: 0.5rem 0.75rem; background: #fff; margin-bottom: 1rem; }
+.editor .ce-block__content, .editor .ce-toolbar__content { max-width: 100%; }
+.editor .cdx-block { font-size: 1.125rem; }

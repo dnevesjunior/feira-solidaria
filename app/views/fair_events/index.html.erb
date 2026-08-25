@@ -1,0 +1,15 @@
+<% content_for :title, "Próxima feira — Feira Solidária" %>
+<h1>Próxima feira</h1>
+<% if @fair_events.empty? %>
+  <p>Nenhuma feira marcada.</p>
+<% else %>
+  <ul class="lista-simples">
+    <% @fair_events.each do |f| %>
+      <li>
+        <strong><%= l(f.starts_at, format: :fair) %></strong> — <%= f.place %>
+        <%= link_to "editar", edit_fair_event_path(f) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+<p><%= link_to "Marcar uma feira", new_fair_event_path, class: "botao" %></p>

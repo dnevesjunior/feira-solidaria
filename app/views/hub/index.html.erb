@@ -1,0 +1,13 @@
+<% content_for :title, "Feira Solidária" %>
+<%= render "hub/apresentacao" %>
+
+<% if @next_fair %>
+  <section class="proxima-feira">
+    <h2>Próxima feira</h2>
+    <p class="destaque"><%= l(@next_fair.starts_at, format: :fair) %></p>
+    <p><%= @next_fair.place %></p>
+    <% if @next_fair.notes.present? %><p class="ajuda"><%= @next_fair.notes %></p><% end %>
+  </section>
+<% end %>
+
+<%= render "hub/lista", enterprises: @enterprises, search: @search, ordering_seed: @ordering_seed %>

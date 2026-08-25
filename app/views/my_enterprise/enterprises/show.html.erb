@@ -1,0 +1,32 @@
+<% content_for :title, "Minha loja — Feira Solidária" %>
+<h1>Minha loja</h1>
+
+<p class="destaque"><%= @enterprise.name %></p>
+<% if @enterprise.published? %>
+  <p>Sua página está no ar em <%= link_to enterprise_url(@enterprise.slug), enterprise_path(@enterprise.slug) %></p>
+  <p class="ajuda">Sua página foi vista <strong><%= @views %></strong> <%= @views == 1 ? "vez" : "vezes" %> nos últimos 30 dias.</p>
+<% else %>
+  <p>Sua página ainda <strong>não está no ar</strong>. Só você e as pessoas do empreendimento veem.</p>
+<% end %>
+
+<nav class="acoes">
+  <%= link_to "Editar minha página", my_enterprise_edit_path, class: "botao" %>
+  <%= link_to "Ver prévia", my_enterprise_preview_path, class: "botao botao-secundario" %>
+  <% if @enterprise.published? %>
+    <%= button_to "Tirar do ar", my_enterprise_unpublish_path, class: "botao botao-secundario", data: { turbo_confirm: "Tirar sua página do ar? Ela continua salva." } %>
+  <% else %>
+    <%= button_to "Publicar minha página", my_enterprise_publish_path, class: "botao", data: { turbo_confirm: "Publicar? Sua página ficará visível para todo mundo em #{enterprise_url(@enterprise.slug)}" } %>
+  <% end %>
+</nav>
+
+<h2>Pessoas</h2>
+<p><%= link_to "Quem faz parte do empreendimento", my_enterprise_memberships_path %></p>
+
+<h2>Seus dados</h2>
+<p>
+  Tudo o que a plataforma guarda sobre o seu empreendimento é seu.
+  <%= link_to "Baixar uma cópia completa", my_enterprise_export_path %> (arquivo zip com dados, página e fotos).
+</p>
+<% if Current.user.enterprises.many? %>
+  <p class="ajuda"><%= link_to "Trocar de empreendimento", my_enterprise_choices_path %></p>
+<% end %>

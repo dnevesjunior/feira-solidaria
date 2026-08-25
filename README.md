@@ -24,8 +24,9 @@ bin/setup        # bundle, banco, migrations, seeds
 bin/dev          # http://localhost:3000
 ```
 
-Seeds criam pessoas fictícias (`db/seeds/pessoas.rb`); todas com senha
-`feira1234`. Para entrar: telefone `13 90000-0001`.
+Seeds criam pessoas, empreendimentos e uma próxima feira, todos fictícios
+(`db/seeds/`); todas as contas com senha `feira1234`. Para entrar: telefone
+`13 90000-0001` (Maria, do "Bordados do Dique").
 
 Testes: `bundle exec rspec`. Lint: `bin/rubocop`. Segurança: `bin/brakeman`.
 
@@ -42,7 +43,20 @@ Testes: `bundle exec rspec`. Lint: `bin/rubocop`. Segurança: `bin/brakeman`.
 | `app/models/event.rb` | Log de eventos append-only. Todo tipo em `Event::Catalog`. |
 | `app/models/concerns/enterprise_scoped.rb` | Escopo por empreendimento. |
 | `app/queries/` | Query objects; leituras que cruzam empreendimentos ficam nomeadas aqui. |
+| `app/models/editor_js/` | `Document` (validação por allowlist) e `Renderer` (JSON → HTML). |
+| `app/models/enterprise_export.rb` | Export completo em zip: dados, vitrine, eventos, imagens. |
+| `app/models/governance/` | Parâmetros de governança em banco com default declarado. |
+| `vendor/javascript/` | EditorJS vendorizado (sem CDN). |
 | `spec/schema/` | Testes de tese: nenhum float, todo modelo com `enterprise_id` é escopado. |
+
+## Minha loja
+
+Quem tem conta cria o próprio empreendimento em `/minha-loja/nova`, escreve a
+página em `/minha-loja/editar` (EditorJS: parágrafo, título, lista, citação,
+foto) e publica quando quiser. A vitrine pública fica em `/<endereco>`. Tudo o
+que a plataforma guarda sobre o empreendimento sai em `/minha-loja/exportar`.
+
+Fotos precisam de `libvips` no sistema (`sudo apt install libvips42`).
 
 ## Contas
 

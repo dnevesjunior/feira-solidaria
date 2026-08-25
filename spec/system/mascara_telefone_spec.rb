@@ -22,6 +22,6 @@ RSpec.describe "Máscara de telefone", type: :system, js: true do
 
     fill_in "Sua senha", with: "feira1234"
     click_button "Entrar"
-    expect(page).to have_content(user.name)
+    expect(page).to have_content("Olá, Maria")
   end
 end

@@ -1,0 +1,4 @@
+<% content_for :title, "Página não encontrada — Feira Solidária" %>
+<h1>Não achamos «<%= @missing_slug %>»</h1>
+<p>Talvez o endereço tenha sido anotado diferente. Procure pelo nome:</p>
+<%= render "hub/lista", enterprises: @enterprises, search: @search, ordering_seed: @ordering_seed, autofocus: true %>

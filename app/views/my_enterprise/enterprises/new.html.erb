@@ -1,0 +1,8 @@
+<% content_for :title, "Criar meu empreendimento — Feira Solidária" %>
+<h1>Criar meu empreendimento</h1>
+<p class="ajuda">Passo 1 de 3: o básico. Fotos e a página vêm depois. Nada fica público até você publicar.</p>
+
+<%= form_with model: @enterprise, url: my_enterprise_create_path, class: "formulario" do |form| %>
+  <%= render "my_enterprise/enterprises/basico", form:, enterprise: @enterprise %>
+  <%= form.submit "Continuar", class: "botao" %>
+<% end %>

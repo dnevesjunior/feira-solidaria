@@ -2,6 +2,8 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
+  has_many :memberships, dependent: :destroy
+  has_many :enterprises, through: :memberships
 
   normalizes :phone, with: ->(raw) { PhoneNumber.normalize(raw) || raw.to_s.strip }
   normalizes :email, with: ->(raw) { raw.to_s.strip.downcase.presence }

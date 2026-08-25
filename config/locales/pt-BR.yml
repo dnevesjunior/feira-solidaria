@@ -7,7 +7,31 @@ pt-BR:
   accounts:
     wrong_current_password: "A senha atual não confere."
     password_changed: "Senha trocada."
+  my_enterprise:
+    created: "Seu empreendimento foi criado. Agora escreva a sua página."
+    saved: "Página salva."
+    published: "Sua página está no ar em %{url}"
+    unpublished: "Sua página saiu do ar. Ela continua salva como rascunho."
+  memberships:
+    not_found: "Não achamos ninguém com esse telefone. A pessoa precisa ter uma conta na feira — fale com a coordenação."
+    added: "%{name} agora faz parte do empreendimento."
+    removed: "Pessoa removida."
+  fair_events:
+    saved: "Próxima feira salva."
+  time:
+    formats:
+      fair: "%A, %d de %B, às %H:%M"
   activerecord:
+    errors:
+      models:
+        enterprise:
+          attributes:
+            slug:
+              reserved: "é um endereço reservado; escolha outro"
+              invalid: "só pode ter letras minúsculas sem acento, separadas por hífen"
+              immutable_after_publish: "não pode mudar depois que a página foi publicada"
+            content:
+              invalid: "não pôde ser salvo"
     models:
       user:
         one: "Conta"
@@ -15,7 +39,36 @@ pt-BR:
       event:
         one: "Evento"
         other: "Eventos"
+      enterprise:
+        one: "Empreendimento"
+        other: "Empreendimentos"
+      membership:
+        one: "Membro"
+        other: "Membros"
+      content_image:
+        one: "Foto"
+        other: "Fotos"
+      fair_event:
+        one: "Feira"
+        other: "Feiras"
     attributes:
+      enterprise:
+        name: "Nome do empreendimento"
+        slug: "Endereço da página"
+        short_description: "Descrição curta"
+        neighborhood: "Bairro"
+        whatsapp: "WhatsApp"
+        instagram: "Instagram"
+        content: "Conteúdo da página"
+        profile_image: "Foto de perfil"
+        cover_image: "Foto de capa"
+      content_image:
+        file: "Foto"
+      fair_event:
+        starts_at: "Início"
+        ends_at: "Fim"
+        place: "Local"
+        notes: "Observações"
       user:
         name: "Nome"
         phone: "Telefone"

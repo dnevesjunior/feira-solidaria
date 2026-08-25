@@ -1,0 +1,36 @@
+<% content_for :title, "Editar minha página — Feira Solidária" %>
+<h1>Editar minha página</h1>
+
+<%= form_with model: @enterprise, url: my_enterprise_update_path, method: :patch, class: "formulario",
+      data: { controller: "editor", editor_upload_url_value: my_enterprise_content_images_path } do |form| %>
+  <%= render "my_enterprise/enterprises/basico", form:, enterprise: @enterprise %>
+
+  <% if @enterprise.draft? %>
+    <div class="campo">
+      <%= form.label :slug, "Endereço da página (só letras e hífen; não muda depois de publicar)" %>
+      <div class="prefixo"><span><%= root_url %></span><%= form.text_field :slug, maxlength: 30, pattern: "[a-z]+(-[a-z]+)*" %></div>
+    </div>
+  <% end %>
+
+  <h2>Fotos</h2>
+  <div class="campo">
+    <%= form.label :profile_image, "Foto de perfil (aparece na lista da feira)" %>
+    <% if @enterprise.profile_image.attached? %><%= image_tag @enterprise.profile_image.variant(:thumb), alt: "", width: 96, height: 96 %><% end %>
+    <%= form.file_field :profile_image, accept: "image/jpeg,image/png,image/webp" %>
+  </div>
+  <div class="campo">
+    <%= form.label :cover_image, "Foto de capa (aparece no topo da sua página)" %>
+    <% if @enterprise.cover_image.attached? %><%= image_tag @enterprise.cover_image.variant(:cover), alt: "", width: 300, height: 158 %><% end %>
+    <%= form.file_field :cover_image, accept: "image/jpeg,image/png,image/webp" %>
+  </div>
+  <p class="ajuda">Fotos até 10 MB, em JPG, PNG ou WebP. Luz natural e fundo liso ajudam.</p>
+
+  <h2>Sua história</h2>
+  <p class="ajuda">Escreva sobre vocês: quem faz, o que faz, desde quando. Toque no + para adicionar título, lista, citação ou foto.</p>
+  <div class="editor" data-editor-target="holder"></div>
+  <%= form.hidden_field :content, value: @enterprise.content.to_json, data: { editor_target: "input" } %>
+  <noscript><p class="aviso aviso-alert">Seu navegador está sem JavaScript; o editor da página não vai abrir. Os outros campos funcionam.</p></noscript>
+
+  <%= form.submit "Salvar", class: "botao", data: { action: "editor#save" } %>
+  <%= link_to "Cancelar", my_enterprise_path, class: "botao botao-secundario" %>
+<% end %>

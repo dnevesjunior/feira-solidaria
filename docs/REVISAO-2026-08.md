@@ -258,14 +258,14 @@ acompanhamento.
 | 2.11 | AGPL vs. coopyleft, com limites explícitos | ADR licença, Epic 0 | ✅ resolvida — ADR 0001 |
 | 2.9 | Quem vê pageview | Epic 0.7 | ✅ resolvida — ADR 0008 |
 | 2.7 | CEP e consentimento coletivo | Processo | Epic 3 subir |
-| 2.5 | Capacidade agregada visível a todos os membros | Epic 2.5 | Epic 2 |
-| 2.12 | Export em zip com imagens | Epic 1.5 | Epic 1 |
-| 2.10 | Validar EditorJS em celular real | Epic 1.3 | Epic 1 (semana 1) |
+| 2.5 | Capacidade agregada visível a todos os membros | Epic 2.5 | ✅ resolvida — Epic 1: nenhum papel privilegiado; qualquer membro edita "próxima feira" |
+| 2.12 | Export em zip com imagens | Epic 1.5 | ✅ resolvida — Epic 1: `EnterpriseExport` gera zip com imagens |
+| 2.10 | Validar EditorJS em celular real | Epic 1.3 | ⏳ implementado com plano B declarado (ADR 0009); aguarda teste em celular real |
 | 2.3 | Modelar `order.routed` honestamente | Epic 3 | Epic 3 |
 | 2.6 | Critério de sucesso: "mais, dentro da capacidade" | `CLAUDE.md` §2 | Medição da v1 |
 | 2.8 | Reescrever justificativa de `capacity_changed` | Epic 2.2 | — |
 | 2.2 | Rateio como proposta, não execução | Epic 4 | Epic 4 |
-| 3 | "Próxima feira" no hub | Epic 1.2 | — |
+| 3 | "Próxima feira" no hub | Epic 1.2 | ✅ resolvida — Epic 1: `FairEvent` no hub |
 
 ---
 

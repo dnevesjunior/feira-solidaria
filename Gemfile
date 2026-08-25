@@ -40,6 +40,9 @@ gem "image_processing", "~> 1.2"
 # Traduções pt-BR do Rails (datas, erros de validação, moeda)
 gem "rails-i18n", "~> 8.0"
 
+# Exportação do empreendimento em zip (ADR 0012)
+gem "rubyzip", "~> 3.0", require: "zip"
+
 group :development, :test do
   gem "rspec-rails", "~> 8.0"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

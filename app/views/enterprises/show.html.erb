@@ -1,0 +1,33 @@
+<% content_for :title, "#{@enterprise.name} — Feira Solidária" %>
+<% if local_assigns[:preview] || @preview %>
+  <p class="aviso aviso-alert">Prévia — sua página ainda não está publicada. <%= link_to "Voltar para Minha loja", my_enterprise_path %></p>
+<% end %>
+
+<article class="vitrine">
+  <% if @enterprise.cover_image.attached? %>
+    <%= image_tag @enterprise.cover_image.variant(:cover), alt: "", class: "capa", width: 1200, height: 630 %>
+  <% end %>
+
+  <header class="vitrine-cabecalho">
+    <% if @enterprise.profile_image.attached? %>
+      <%= image_tag @enterprise.profile_image.variant(:profile), alt: "", class: "perfil", width: 120, height: 120 %>
+    <% end %>
+    <h1><%= @enterprise.name %></h1>
+    <% if @enterprise.short_description.present? %><p class="descricao"><%= @enterprise.short_description %></p><% end %>
+    <% if @enterprise.neighborhood.present? %><p class="ajuda"><%= @enterprise.neighborhood %></p><% end %>
+  </header>
+
+  <div class="conteudo-vitrine">
+    <%= @html %>
+  </div>
+
+  <footer class="contato">
+    <h2>Fale com a gente</h2>
+    <p>
+      <%= link_to "Chamar no WhatsApp", "https://wa.me/#{@enterprise.whatsapp.delete('+')}", class: "botao", rel: "noopener" %>
+    </p>
+    <% if @enterprise.instagram.present? %>
+      <p><%= link_to "@#{@enterprise.instagram} no Instagram", "https://instagram.com/#{@enterprise.instagram}", rel: "noopener" %></p>
+    <% end %>
+  </footer>
+</article>

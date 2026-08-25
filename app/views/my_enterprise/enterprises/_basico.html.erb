@@ -1,0 +1,27 @@
+<% if enterprise.errors.any? %>
+  <ul class="erros">
+    <% enterprise.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
+  </ul>
+<% end %>
+
+<div class="campo">
+  <%= form.label :name, "Nome do empreendimento" %>
+  <%= form.text_field :name, required: true, maxlength: 60, autocomplete: "organization" %>
+</div>
+<div class="campo">
+  <%= form.label :whatsapp, "WhatsApp para pedidos" %>
+  <%= form.telephone_field :whatsapp, required: true, inputmode: "tel", placeholder: "(13) 99999-9999", maxlength: 15,
+        data: { controller: "phone-mask", action: "input->phone-mask#format" } %>
+</div>
+<div class="campo">
+  <%= form.label :short_description, "Uma frase sobre o que você faz (opcional)" %>
+  <%= form.text_field :short_description, maxlength: 200, placeholder: "Doces caseiros e bolos por encomenda" %>
+</div>
+<div class="campo">
+  <%= form.label :neighborhood, "Bairro (opcional — só o bairro, nunca a rua)" %>
+  <%= form.text_field :neighborhood, maxlength: 60 %>
+</div>
+<div class="campo">
+  <%= form.label :instagram, "Instagram (opcional)" %>
+  <%= form.text_field :instagram, placeholder: "seu.usuario", maxlength: 30 %>
+</div>

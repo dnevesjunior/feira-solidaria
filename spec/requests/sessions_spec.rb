@@ -7,7 +7,7 @@ RSpec.describe "Entrar" do
     post session_path, params: { phone: "(13) 90000-0001", password: "pão de queijo" }
     expect(response).to redirect_to(root_path)
     follow_redirect!
-    expect(response.body).to include(user.name)
+    expect(response.body).to include("Olá, Maria", "Minha loja")
   end
 
   it "recusa senha errada com mensagem em português" do

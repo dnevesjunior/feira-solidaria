@@ -1,0 +1,37 @@
+<section class="lista-lojas">
+  <h2 id="lojas">Empreendimentos</h2>
+
+  <%= form_with url: root_path, method: :get, class: "busca", data: { turbo: false } do |form| %>
+    <label for="q" class="visualmente-oculto">Buscar empreendimento pelo nome</label>
+    <%= form.search_field :q, id: "q", value: search, placeholder: "Buscar pelo nome", autofocus: local_assigns[:autofocus] %>
+    <%= form.submit "Buscar", class: "botao botao-secundario" %>
+  <% end %>
+
+  <% if enterprises.empty? %>
+    <p><%= search.present? ? "Nenhum empreendimento com «#{search}»." : "Ainda não há empreendimentos publicados." %></p>
+  <% else %>
+    <ul class="cards">
+      <% enterprises.each do |e| %>
+        <li>
+          <%= link_to enterprise_path(e.slug), class: "card" do %>
+            <% if e.profile_image.attached? %>
+              <%= image_tag e.profile_image.variant(:thumb), alt: "", width: 160, height: 160, loading: "lazy" %>
+            <% else %>
+              <span class="card-sem-foto" aria-hidden="true"><%= e.name.first %></span>
+            <% end %>
+            <span class="card-texto">
+              <strong><%= e.name %></strong>
+              <% if e.neighborhood.present? %><span class="ajuda"><%= e.neighborhood %></span><% end %>
+              <% if e.short_description.present? %><span><%= e.short_description %></span><% end %>
+            </span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <p class="ajuda regra-ordem">
+    A ordem dos empreendimentos muda todo dia e não depende de vendas, cliques ou
+    de quem chegou primeiro. Semente de hoje: <code><%= ordering_seed %></code>.
+  </p>
+</section>

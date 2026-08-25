@@ -24,6 +24,9 @@
       <%= link_to "Feira Solidária", root_path, class: "marca" %>
       <nav>
         <% if authenticated? %>
+          <span class="ajuda">Olá, <%= Current.user.name.split.first %></span>
+          <%= link_to "Minha loja", my_enterprise_path %>
+          <%= link_to "Próxima feira", fair_events_path %>
           <%= link_to "Minha conta", account_path %>
           <%= button_to "Sair", session_path, method: :delete, class: "link" %>
         <% else %>

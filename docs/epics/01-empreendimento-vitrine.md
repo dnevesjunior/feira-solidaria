@@ -115,3 +115,45 @@ Ninguém deve descobrir que sua página está no ar sem ter decidido isso.
 ## Ao final do epic
 
 Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?**
+
+---
+
+## Encerramento — 2026-08-25
+
+### Checklist
+
+| Critério | Estado | Prova |
+|---|---|---|
+| Pessoa com Android modesto cria página, sobe capa, escreve três parágrafos e publica | ⚠️ automatizado; **falta o teste real** | `spec/system/vitrine_spec.rb` (Chrome, 412×915, capa de 6 MB, EditorJS) — passo 11 do plano pendente |
+| Endereço cabe numa frase e funciona digitado | ✅ | `spec/models/enterprise/slug_spec.rb`; `GET /doces-da-cida` |
+| Vitrine < 3 s em 3G simulado | ✅ (proxy) | HTML+CSS+JS < 100 KB gzip sem imagens, sem editor (`spec/requests/enterprise_show_spec.rb`); imagens lazy com dimensões |
+| Foto de 6 MB aceita e servida comprimida | ✅ | `spec/models/content_image_spec.rb`: > 6 MB → < 20% do peso, ≤ 1600 px |
+| Empreendimento exporta sozinho | ✅ | zip com `empreendimento.json`, `vitrine.json`, `eventos.json`, `imagens/` |
+| Script rejeitado — teste prova | ✅ | `spec/models/editor_js/document_spec.rb`; PATCH com script → 422 e nada gravado |
+| Hub em dias diferentes mostra ordens diferentes | ✅ | `spec/queries/published_enterprises_query_spec.rb` |
+| Nenhum dado de uma loja em consulta escopada a outra | ✅ | `spec/requests/my_enterprise_spec.rb` (sessão forçada, imagem de outra loja, `for_current`) |
+
+Adições sobre o especificado: "próxima feira" no hub (`FairEvent`), visitas da
+própria vitrine (ADR 0008), `Governance::Parameter` (ADR 0011).
+
+### Quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?
+
+1. **Sem papel de coordenação:** qualquer membro edita "próxima feira" e adiciona
+   pessoas ao empreendimento de que participa. Aceito para não criar hierarquia antes do
+   Epic 5; tudo gera evento. Risco de edição errada assumido.
+2. **Slug sem dígitos** ("Doces da 13" → `doces-da`). Segue a nota do epic; a pessoa
+   edita o endereço enquanto está em rascunho.
+3. **Slug imutável após publicar, sem redirecionamento.** Mudar de nome quebra o link
+   falado. Redirecionamento é pequeno; entra se surgir demanda.
+4. **Proxy de imagens pelo Puma** em 1 vCPU — escolha pró-3G que custa CPU (ADR 0010).
+5. **HEIC recusado** (iPhone). Público-alvo é Android; reavaliar se aparecer demanda.
+6. **Texto do hub por commit** até o Epic 5 — o desenvolvedor é o gargalo de uma
+   decisão da rede. Placeholder marcado; aguarda texto da coordenação.
+7. **`Governance::Parameter` sem autor/justificativa** — sem violação porque não há
+   mudança possível; o Epic 5 troca o formato antes da primeira alteração (ADR 0011).
+8. **EditorJS ainda não validado com o público** (revisão 2.10). A automação prova que
+   funciona num Chrome de celular; não prova que uma pessoa de 65 anos consegue usar.
+   Plano B declarado no ADR 0009. **O epic não está fechado até o teste real.**
+9. **Visitas da própria vitrine** são um número que a pessoa vê — é a primeira métrica da
+   plataforma. Só a própria, nunca comparativa (ADR 0008); ainda assim, é um número, e
+   números viram metas. Observar como as famílias o recebem.

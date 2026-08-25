@@ -1,0 +1,9 @@
+<% content_for :title, "Escolher empreendimento — Feira Solidária" %>
+<h1>Qual empreendimento?</h1>
+<p>Você faz parte de mais de um. Escolha qual quer editar agora:</p>
+<ul class="lista-simples">
+  <% @enterprises.each do |e| %>
+    <li><%= button_to e.name, my_enterprise_choose_path, params: { enterprise_id: e.id }, class: "botao botao-secundario" %></li>
+  <% end %>
+</ul>
+<p class="ajuda"><%= link_to "Criar outro empreendimento", my_enterprise_new_path %></p>

@@ -1,0 +1,23 @@
+<%= form_with model: @fair_event, class: "formulario" do |form| %>
+  <% if @fair_event.errors.any? %>
+    <ul class="erros"><% @fair_event.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul>
+  <% end %>
+  <div class="campo">
+    <%= form.label :starts_at, "Começa em" %>
+    <%= form.datetime_field :starts_at, required: true %>
+  </div>
+  <div class="campo">
+    <%= form.label :ends_at, "Termina em (opcional)" %>
+    <%= form.datetime_field :ends_at %>
+  </div>
+  <div class="campo">
+    <%= form.label :place, "Local" %>
+    <%= form.text_field :place, required: true, maxlength: 120, placeholder: "Praça da Igreja, Vila Gilda" %>
+  </div>
+  <div class="campo">
+    <%= form.label :notes, "Observações (opcional)" %>
+    <%= form.text_area :notes, maxlength: 500, rows: 3 %>
+  </div>
+  <%= form.submit "Salvar", class: "botao" %>
+  <%= link_to "Cancelar", fair_events_path, class: "botao botao-secundario" %>
+<% end %>

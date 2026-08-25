@@ -1,0 +1,27 @@
+<% content_for :title, "Pessoas do empreendimento — Feira Solidária" %>
+<h1>Pessoas do empreendimento</h1>
+<p class="ajuda"><%= Current.enterprise.name %></p>
+
+<ul class="lista-simples">
+  <% @memberships.each do |m| %>
+    <li>
+      <strong><%= m.user.name %></strong> <span class="ajuda"><%= PhoneNumber.format(m.user.phone) %></span>
+      <% if @memberships.size > 1 %>
+        <%= button_to "Remover", my_enterprise_membership_path(m), method: :delete, class: "link",
+              data: { turbo_confirm: "Remover #{m.user.name} do empreendimento?" } %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<h2>Adicionar uma pessoa</h2>
+<p class="ajuda">A pessoa precisa já ter conta na feira (a coordenação cria).</p>
+<%= form_with url: my_enterprise_memberships_path, class: "formulario" do |form| %>
+  <div class="campo">
+    <%= form.label :phone, "Telefone da pessoa" %>
+    <%= form.telephone_field :phone, required: true, inputmode: "tel", placeholder: "(13) 99999-9999", maxlength: 15,
+          data: { controller: "phone-mask", action: "input->phone-mask#format" } %>
+  </div>
+  <%= form.submit "Adicionar", class: "botao" %>
+<% end %>
+<p><%= link_to "Voltar para Minha loja", my_enterprise_path %></p>
