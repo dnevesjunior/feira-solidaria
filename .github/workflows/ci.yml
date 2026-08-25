@@ -136,7 +136,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Trust the server host key
-        run: mkdir -p ~/.ssh && ssh-keyscan -H 67.205.134.61 >> ~/.ssh/known_hosts
+        run: mkdir -p ~/.ssh && ssh-keyscan -t ed25519 67.205.134.61 >> ~/.ssh/known_hosts  # sem -H: o Net::SSH do Kamal não casa entradas hasheadas
 
       - name: Write master key
         run: echo "$RAILS_MASTER_KEY" > config/master.key
