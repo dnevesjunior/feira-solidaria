@@ -11,6 +11,10 @@
 ARG RUBY_VERSION=3.3.8
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
+# Vincula a imagem ao repositório no GHCR (permite ao GITHUB_TOKEN publicar).
+LABEL org.opencontainers.image.source="https://github.com/dnevesjunior/feira-solidaria" \
+      org.opencontainers.image.licenses="AGPL-3.0-only"
+
 # Rails app lives here
 WORKDIR /rails
 

@@ -14,10 +14,18 @@ trap cleanup EXIT
 
 echo "→ subindo $IMAGE como $NAME"
 docker run -d --name "$NAME" -e POSTGRES_PASSWORD=restore -e POSTGRES_DB=restore "$IMAGE" >/dev/null
-for _ in $(seq 1 30); do
-  docker exec "$NAME" pg_isready -U postgres -q && break
+# A imagem oficial sobe um servidor temporário na inicialização e o reinicia;
+# pg_isready responde cedo demais. Exige duas consultas seguidas com sucesso.
+ok=0
+for _ in $(seq 1 60); do
+  if docker exec "$NAME" psql -U postgres -d restore -Atqc "select 1" >/dev/null 2>&1; then
+    ok=$((ok + 1)); [ "$ok" -ge 2 ] && break
+  else
+    ok=0
+  fi
   sleep 1
 done
+[ "$ok" -ge 2 ] || { echo "Postgres descartável não ficou pronto"; exit 1; }
 
 START=$(date +%s)
 echo "→ restaurando $(du -h "$DUMP" | cut -f1) de $DUMP"

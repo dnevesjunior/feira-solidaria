@@ -134,3 +134,55 @@ Comportamento observável, não artefato:
 ## Ao final do epic
 
 Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?**
+
+---
+
+## Encerramento — 2026-08-25
+
+### Checklist
+
+| Critério | Estado | Prova |
+|---|---|---|
+| `git push` na `main` → site no ar | ⚠️ parcial | App no ar via `kamal deploy` da máquina do autor; o job de deploy do CI depende de duas ações pendentes do autor (chave do CI no host via `bin/host-setup`; acesso do repositório ao pacote no GHCR) |
+| Dev novo clona, roda um comando, tem ambiente com seed | ✅ | `bin/setup` + `db/seeds/pessoas.rb` |
+| 10 reais + 10 chiquinhos levanta exceção | ✅ | `spec/models/amount_spec.rb` |
+| Evento não pode ser alterado nem apagado | ✅ | `spec/models/event_spec.rb` (ActiveRecord e trigger SQL) |
+| Backup restaurado em ambiente limpo | ✅ | `docs/operacao/restore-2026-08-25.md` |
+| Nenhuma requisição de terceiro sai da página | ✅ | `spec/requests/no_third_party_spec.rb` + inspeção manual do HTML em produção |
+| ADRs 0001–0008 | ✅ | `docs/decisions/` |
+| Nenhum float no schema | ✅ | `spec/schema/no_float_spec.rb` |
+| Isolamento por empreendimento preparado | ✅ | `spec/schema/enterprise_scope_spec.rb` |
+
+Pendências operacionais (não bloqueiam o Epic 1): DNS de
+`feira.reciboemdia.com.br`, certificado TLS, destino do backup remoto
+(Backblaze B2 ou outro), e a migração para VPS dedicado antes do Epic 3
+(ADR 0003).
+
+### Quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?
+
+1. **Coordenação cria contas e redefine senhas de qualquer pessoa** (ADR 0007).
+   Assimetria de poder inevitável sem canal de recuperação autônomo. Mitigação:
+   evento `user.password_reset_by_coordination` registrado. Pauta do Epic 5:
+   quem pode, e como se sabe que fez.
+2. **O rito "conta criada em reunião" foi decidido pelo desenvolvedor**, não pela
+   rede. Coerente com o §8 na intenção, mas precisa ser validado com a
+   coordenação antes do Epic 1.
+3. **GitHub e GHCR (Microsoft) como CI e registry** (ADR 0003). Dependência de
+   plataforma corporativa num projeto que critica plataformas. Tudo é portável;
+   fica como dívida política nomeada.
+4. **Servidor compartilhado, fora do Brasil**, com dado de outro projeto na mesma
+   máquina. Só seeds fictícios agora; migração para VPS dedicado é condição para
+   o Epic 3 (ADR 0003).
+5. **Seeds inventados pelo desenvolvedor.** Nomes fictícios plausíveis são ainda
+   o desenvolvedor imaginando a feira. O vocabulário real deve vir das famílias
+   antes do Epic 2.
+6. **Teste de float estrito** proíbe `numeric` em qualquer coluna — mais do que o
+   §3.1 pede. Deliberado (ADR 0004).
+7. **Logs de acesso com IP** por 14 dias no host (ADR 0008). Dado pessoal, fora
+   da telemetria própria; registrado com prazo.
+8. **"Sem PII no payload" é allowlist, não prova formal** (ADR 0006). Um tipo de
+   evento cadastrado com chave errada pode vazar; a barreira é o catálogo e a
+   revisão.
+9. **`allow_browser versions: :modern` do Rails foi removido.** O padrão do
+   framework bloquearia navegadores antigos de Android barato (§3.6) — um caso
+   em que "o jeito padrão" era o jeito errado.
