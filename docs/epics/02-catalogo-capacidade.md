@@ -1,0 +1,135 @@
+# Epic 2 — Catálogo com capacidade declarada
+
+> Pré-requisitos: `CLAUDE.md`, Epics 0 e 1 concluídos.
+
+## Objetivo
+
+Cada empreendimento cadastra o que produz, a que preço, e **quanto consegue
+produzir por período**.
+
+## Por que a capacidade importa
+
+É o campo que quase nenhum marketplace tem, e é pré-requisito do Epic 4 (pedido
+coletivo). Marketplace convencional modela **estoque** — uma quantidade
+existente, pronta, que decrementa a cada venda. Produção artesanal familiar não
+funciona assim: o item é feito sob demanda, e o limite real não é o que existe
+na prateleira, é quanto a pessoa consegue fazer numa semana sem adoecer.
+
+Modelar estoque aqui seria importar um pressuposto de produção industrial para
+um contexto que não é industrial — exatamente o erro que o projeto existe para
+não cometer (`CLAUDE.md` §1.1).
+
+Custa quase nada agora. Adicionar depois significa pedir a 30 famílias que
+revisitem todo o catálogo.
+
+## Fora de escopo
+
+Pedido (Epic 3), rateio entre empreendimentos (Epic 4), preço em Chiquinho
+(Epic 6). Preço aqui é **em reais**, usando a primitiva monetária do Epic 0.
+
+---
+
+## Escopo
+
+### 2.1 Modelo `Product`
+
+- Pertence a um empreendimento (escopado — `CLAUDE.md` §3.5).
+- Nome, descrição, fotos (mesma pipeline de compressão do Epic 1).
+- Preço unitário em reais (inteiro, unidade explícita).
+- Unidade de venda em texto livre controlado: unidade, par, dúzia, kg, 100g,
+  pote, litro. Não inventar taxonomia sofisticada — a feira tem vocabulário
+  próprio e ele deve caber.
+- Estado: rascunho / publicado / pausado.
+  **"Pausado" é importante e distinto de "sem estoque":** significa "não estou
+  produzindo isso agora", que é a situação real de quem parou por doença,
+  viagem, falta de insumo ou porque a demanda mudou de estação.
+
+### 2.2 Capacidade declarada
+
+- Campo por produto: **quantidade que o empreendimento consegue produzir por
+  período**, com período configurável (semana como padrão).
+- Prazo típico de entrega em dias.
+- É **declaração**, não contrato. Interface deve deixar isso claro: "quanto você
+  consegue fazer numa semana, mais ou menos". Sem penalidade, sem alerta de
+  descumprimento, sem métrica de "confiabilidade" — isso seria rating por outro
+  nome (`CLAUDE.md` §3.2).
+- Editável a qualquer momento pelo próprio empreendimento, com a alteração
+  registrada em evento (o histórico de capacidade declarada é dado de pesquisa
+  valioso e não custa nada guardar).
+
+### 2.3 Categorias
+
+- Lista **curta e fechada**, definida com a feira, não inventada pelo
+  desenvolvedor. Se ninguém perguntou às famílias quais são as categorias, ainda
+  não dá para implementar isso — deixar um único agrupamento e voltar depois.
+- Categoria é atributo de organização, nunca de priorização de exibição.
+
+### 2.4 Catálogo agregado da feira
+
+- Página que lista produtos de toda a rede.
+- Mesma regra de ordenação rotativa do hub, lida do objeto de configuração
+  (`CLAUDE.md` §3.4).
+- Filtro por categoria. Busca por nome.
+- **Sem** "mais vendidos", "em alta", "recomendados para você", "quem viu também
+  viu". Nenhuma ordenação derivada de comportamento agregado ou de perfil
+  individual.
+- Cada item leva à vitrine do empreendimento — a loja é a unidade de
+  apresentação, não o produto solto. A pessoa deve saber de quem está comprando.
+
+### 2.5 Visão agregada de capacidade (interna)
+
+- Para a coordenação da feira: dado um produto ou categoria, qual é a capacidade
+  somada da rede.
+- Só leitura, sem ação associada ainda.
+- É o embrião do Epic 4 e o primeiro momento em que a rede consegue **se ver
+  como capacidade produtiva coletiva** — algo que a feira presencial
+  estruturalmente não consegue fazer.
+
+### 2.6 Exportação
+
+- Estender o export do Epic 1 para incluir produtos e histórico de capacidade.
+
+### 2.7 Eventos registrados
+
+`product.created`, `product.published`, `product.paused`, `product.updated`,
+`product.capacity_changed` (com valor anterior e novo).
+
+---
+
+## Notas de desenho
+
+**Sobre cadastrar produto pelo celular:** é a tarefa mais repetitiva que uma
+família vai fazer na plataforma. Formulário longo com muitos campos obrigatórios
+é o ponto mais provável de abandono do projeto inteiro. Mínimo obrigatório:
+nome, foto, preço. Todo o resto é preenchível depois.
+
+**Sobre preço:** não sugerir preço, não comparar com o de outros
+empreendimentos, não sinalizar "acima da média". Precificação é decisão do
+empreendimento, e insinuar comparação introduz concorrência interna numa rede
+que se define pela cooperação.
+
+**Sobre foto:** oferecer orientação simples e opcional de como fotografar
+(luz natural, fundo liso). Isso é formação, e é o tipo de coisa que a parceria
+com o grupo de comunicação comunitária pode produzir bem melhor do que um
+desenvolvedor sozinho.
+
+---
+
+## Pronto significa
+
+- [ ] Uma pessoa cadastra três produtos pelo celular em menos de 10 minutos,
+      sem ajuda.
+- [ ] Um produto pode ser pausado e volta a aparecer quando despausado.
+- [ ] A coordenação consulta a capacidade semanal somada da rede para uma
+      categoria e obtém um número.
+- [ ] Alterar a capacidade declarada gera evento com valor anterior e novo —
+      teste prova.
+- [ ] O catálogo agregado não expõe nenhuma ordenação derivada de vendas,
+      cliques ou perfil — revisão de código confirma.
+- [ ] O export do empreendimento inclui produtos e histórico de capacidade.
+
+---
+
+## Ao final do epic
+
+Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?**
