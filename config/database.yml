@@ -1,0 +1,26 @@
+# PostgreSQL. Versão mínima suportada: 9.3 (Rails), em uso: 16.
+#
+# Desenvolvimento e teste usam o socket local com o usuário do sistema.
+# Produção usa um único banco (ADR 0003): aplicação, Solid Queue e Solid Cache
+# vivem juntos — um só backup, um só restore.
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: feira_solidaria_development
+
+test:
+  <<: *default
+  database: feira_solidaria_test
+
+production:
+  <<: *default
+  database: feira_solidaria_production
+  username: feira_solidaria
+  password: <%= ENV["FEIRA_SOLIDARIA_DATABASE_PASSWORD"] %>
+  host: <%= ENV.fetch("FEIRA_SOLIDARIA_DATABASE_HOST", "feira-db") %>

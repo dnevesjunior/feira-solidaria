@@ -165,10 +165,10 @@ com estes termos.
 - **EditorJS** para conteúdo editável da vitrine (já validado pelo autor em
   projeto anterior). Persistir como JSON estruturado, **nunca HTML bruto**;
   renderizar server-side com allowlist de blocos.
-- Testes: Minitest ou RSpec (escolha no Epic 0 e registre em ADR). Testes de
-  sistema para os critérios de "pronto significa" de cada epic.
-- Deploy: definir no Epic 0. Preferir custo baixo e previsível — é orçamento de
-  extensão universitária, não de startup.
+- Testes: **RSpec** (ADR 0002). Testes de sistema para os critérios de "pronto
+  significa" de cada epic.
+- Deploy: **Kamal em VPS próprio** (ADR 0003). Custo baixo e previsível — é
+  orçamento de extensão universitária, não de startup.
 - Timezone `America/Sao_Paulo`. Locale `pt-BR`. Moeda formatada em pt-BR.
 
 ### 5.1 Licença
@@ -210,7 +210,7 @@ Não deixe isso morrer em mensagem de commit.
 
 | # | Epic | Estado |
 |---|---|---|
-| 0 | Fundação | especificado |
+| 0 | Fundação | implementado (ago/2026) |
 | 1 | Empreendimento e vitrine | especificado |
 | 2 | Catálogo com capacidade declarada | especificado |
 | 3 | Roteamento de pedido | especificado — **fim da v1** |

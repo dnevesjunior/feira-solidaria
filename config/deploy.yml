@@ -1,0 +1,70 @@
+# Deploy com Kamal 2 (ADR 0003). O VPS atual serve ao Epic 0 e a demonstrações;
+# o piloto real vai para um servidor dedicado — trocar o host abaixo basta.
+service: feira
+image: dnevesjunior/feira-solidaria
+
+servers:
+  web:
+    hosts:
+      - 67.205.134.61
+
+# kamal-proxy fica atrás do nginx do host, que termina TLS (ADR 0003).
+proxy:
+  ssl: false
+  host: feira.reciboemdia.com.br
+  forward_headers: true
+  healthcheck:
+    path: /up
+    interval: 3
+    timeout: 10
+
+registry:
+  server: ghcr.io
+  username: dnevesjunior
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - FEIRA_SOLIDARIA_DATABASE_PASSWORD
+  clear:
+    # Jobs dentro do Puma: memória é o recurso escasso.
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_CONCURRENCY: 1
+    RAILS_MAX_THREADS: 3
+    TZ: America/Sao_Paulo
+    APP_HOST: feira.reciboemdia.com.br
+    FEIRA_SOLIDARIA_DATABASE_HOST: feira-db
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+
+volumes:
+  - "/var/lib/feira/storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64
+
+ssh:
+  user: root
+
+accessories:
+  db:
+    image: postgres:16-alpine
+    host: 67.205.134.61
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_USER: feira_solidaria
+        POSTGRES_DB: feira_solidaria_production
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - /var/lib/feira/postgres:/var/lib/postgresql/data
+    cmd: postgres -c shared_buffers=128MB -c max_connections=30

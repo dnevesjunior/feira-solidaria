@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Prepara o host uma única vez (docs/operacao/servidor.md). Idempotente.
+#   bin/host-setup root@67.205.134.61 ~/.ssh/feira-ci/id_ed25519.pub
+# Faz: chave do CI em authorized_keys, diretórios de dados, site nginx,
+# script de backup + cron. Não toca em nada do outro projeto do host.
+set -euo pipefail
+
+TARGET="${1:?uso: bin/host-setup usuario@host caminho/da/chave-ci.pub}"
+CI_PUBKEY_FILE="${2:?uso: bin/host-setup usuario@host caminho/da/chave-ci.pub}"
+SITE="feira.reciboemdia.com.br"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+PUB="$(cat "$CI_PUBKEY_FILE")"
+
+echo "→ enviando nginx-feira.conf e bin/backup"
+scp -q "$HERE/docs/operacao/nginx-feira.conf" "$TARGET:/tmp/feira-nginx.conf"
+scp -q "$HERE/bin/backup" "$TARGET:/tmp/feira-backup"
+
+echo "→ configurando o host"
+ssh "$TARGET" bash -s "$SITE" "$PUB" <<'REMOTE'
+set -euo pipefail
+SITE="$1"; PUB="$2"
+
+mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+grep -qF "$PUB" ~/.ssh/authorized_keys || echo "$PUB" >> ~/.ssh/authorized_keys
+echo "  chave do CI: ok"
+
+mkdir -p /var/lib/feira/postgres /var/lib/feira/storage /var/backups/feira /opt/feira/bin
+echo "  diretórios: ok"
+
+install -m 644 /tmp/feira-nginx.conf "/etc/nginx/sites-available/$SITE"
+ln -sf "/etc/nginx/sites-available/$SITE" "/etc/nginx/sites-enabled/$SITE"
+nginx -t
+systemctl reload nginx
+echo "  nginx: ok ($SITE → 127.0.0.1:8080)"
+
+install -m 755 /tmp/feira-backup /opt/feira/bin/backup
+printf '0 3 * * * root /opt/feira/bin/backup >> /var/log/feira-backup.log 2>&1\n' > /etc/cron.d/feira-backup
+chmod 644 /etc/cron.d/feira-backup
+echo "  backup + cron (03:00): ok"
+
+rm -f /tmp/feira-nginx.conf /tmp/feira-backup
+REMOTE
+
+echo "→ pronto. Depois do DNS apontar: ssh $TARGET certbot --nginx -d $SITE"

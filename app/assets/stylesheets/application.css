@@ -1,0 +1,89 @@
+/*
+ * Folha própria, sem framework (CLAUDE.md §3.6): peso mínimo, contraste alto,
+ * alvos de toque de 48px, fonte do sistema. Revisitar no Epic 1.
+ */
+:root {
+  --texto: #1b1b1b;
+  --fundo: #fffdf8;
+  --primaria: #7a2e0e;
+  --primaria-texto: #ffffff;
+  --borda: #8a8a8a;
+  --aviso-fundo: #fff3cd;
+  --erro-fundo: #f8d7da;
+  --sucesso-fundo: #d4edda;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fundo);
+}
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--primaria);
+}
+
+.topo nav { display: flex; gap: 1rem; align-items: center; }
+.marca { font-weight: 700; color: var(--primaria); text-decoration: none; font-size: 1.25rem; }
+
+a { color: var(--primaria); }
+a, button, input[type="submit"], .botao { min-height: 48px; }
+
+.conteudo { max-width: 40rem; margin: 0 auto; padding: 1rem; }
+
+h1 { font-size: 1.75rem; margin: 0.5rem 0 1rem; }
+h2 { font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+
+.formulario .campo { margin-bottom: 1.25rem; }
+.formulario label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+.formulario input {
+  width: 100%;
+  font-size: 1.125rem;
+  padding: 0.75rem;
+  border: 2px solid var(--borda);
+  border-radius: 6px;
+  background: #fff;
+}
+.formulario input:focus { outline: 3px solid var(--primaria); outline-offset: 2px; }
+
+.botao, input[type="submit"] {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primaria-texto);
+  background: var(--primaria);
+  border: 0;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--primaria);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.aviso { padding: 0.75rem 1rem; border-radius: 6px; margin: 0 0 1rem; }
+.aviso-alert { background: var(--erro-fundo); }
+.aviso-notice { background: var(--sucesso-fundo); }
+.erros { background: var(--erro-fundo); padding: 0.75rem 1rem 0.75rem 2rem; border-radius: 6px; }
+.ajuda { color: #444; font-size: 1rem; }
+.dados dt { font-weight: 600; margin-top: 0.5rem; }
+.dados dd { margin: 0; }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "Feira Solidária" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Nenhum recurso de terceiro nesta página (CLAUDE.md §3.3). %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header class="topo">
+      <%= link_to "Feira Solidária", root_path, class: "marca" %>
+      <nav>
+        <% if authenticated? %>
+          <%= link_to "Minha conta", account_path %>
+          <%= button_to "Sair", session_path, method: :delete, class: "link" %>
+        <% else %>
+          <%= link_to "Entrar", new_session_path %>
+        <% end %>
+      </nav>
+    </header>
+
+    <main class="conteudo">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<% content_for :title, "Minha conta — Feira Solidária" %>
+<h1>Minha conta</h1>
+
+<dl class="dados">
+  <dt>Nome</dt><dd><%= @user.name %></dd>
+  <dt>Telefone</dt><dd><%= PhoneNumber.format(@user.phone) %></dd>
+</dl>
+
+<h2>Trocar minha senha</h2>
+
+<%= form_with url: account_path, method: :patch, class: "formulario" do |form| %>
+  <% if @user.errors.any? %>
+    <ul class="erros">
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div class="campo">
+    <%= form.label :current_password, "Senha atual" %>
+    <%= form.password_field :current_password, required: true, autocomplete: "current-password" %>
+  </div>
+
+  <div class="campo">
+    <%= form.label :password, "Nova senha (pelo menos 8 letras ou números; pode ser uma frase)" %>
+    <%= form.password_field :password, required: true, autocomplete: "new-password", minlength: 8 %>
+  </div>
+
+  <div class="campo">
+    <%= form.label :password_confirmation, "Repita a nova senha" %>
+    <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", minlength: 8 %>
+  </div>
+
+  <%= form.submit "Trocar senha", class: "botao" %>
+<% end %>

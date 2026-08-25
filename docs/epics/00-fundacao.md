@@ -43,10 +43,10 @@ Cada uma vira arquivo em `docs/decisions/`:
 ### 0.3 Autenticação
 
 - Autenticação nativa do Rails, sem dependência externa pesada.
-- **Login por e-mail é premissa frágil neste público.** Prever desde já que
-  parte das pessoas usa apenas WhatsApp e pode não ter e-mail ativo. Não
-  resolver agora — mas não modelar `User` de um jeito que torne impossível
-  adicionar identificação por telefone depois.
+- **Login por e-mail é premissa frágil neste público.** Parte das pessoas usa
+  apenas WhatsApp e pode não ter e-mail ativo. **Resolvido no Epic 0:**
+  identificador é o telefone, e-mail é opcional, recuperação de senha é
+  presencial pela coordenação (ADR 0007; revisão 2.4).
 - Sem login social (dependência de terceiro + telemetria).
 - Sem verificação por e-mail bloqueante no primeiro acesso.
 
@@ -126,7 +126,8 @@ Comportamento observável, não artefato:
 - [ ] Um backup foi restaurado com sucesso em ambiente limpo, ao menos uma vez.
 - [ ] Nenhuma requisição de terceiro sai da página (verificado no inspetor de
       rede).
-- [ ] Existem 5 ADRs em `docs/decisions/`.
+- [ ] Existem os ADRs 0001–0008 em `docs/decisions/` (licença, testes, deploy,
+      valor monetário, escopo, log de eventos, autenticação, telemetria).
 
 ---
 

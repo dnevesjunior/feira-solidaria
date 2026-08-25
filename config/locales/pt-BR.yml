@@ -1,0 +1,28 @@
+# Textos da aplicação. As traduções do Rails (erros, datas, moeda) vêm da gem rails-i18n.
+pt-BR:
+  sessions:
+    invalid: "Telefone ou senha não conferem. Tente de novo."
+    rate_limited: "Muitas tentativas. Espere alguns minutos e tente de novo."
+    signed_out: "Você saiu."
+  accounts:
+    wrong_current_password: "A senha atual não confere."
+    password_changed: "Senha trocada."
+  activerecord:
+    models:
+      user:
+        one: "Conta"
+        other: "Contas"
+      event:
+        one: "Evento"
+        other: "Eventos"
+    attributes:
+      user:
+        name: "Nome"
+        phone: "Telefone"
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmação da senha"
+      event:
+        kind: "Tipo"
+        payload: "Conteúdo"
+        occurred_at: "Ocorrido em"

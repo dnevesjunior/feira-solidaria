@@ -252,11 +252,11 @@ acompanhamento.
 
 | # | Decisão | Onde | Bloqueia |
 |---|---|---|---|
-| 2.1 | PII fora do payload de eventos | ADR append-only, Epic 0 | Epic 0 |
-| 2.4 | Telefone como identificador; conta criada presencialmente | ADR autenticação, Epic 0 | Epic 0 |
-| 2.13 | Conversão só por lançamento explícito | ADR valor monetário, Epic 0 | Epic 0 |
-| 2.11 | AGPL vs. coopyleft, com limites explícitos | ADR licença, Epic 0 | Primeiro commit |
-| 2.9 | Quem vê pageview | Epic 0.7 | Epic 0 |
+| 2.1 | PII fora do payload de eventos | ADR append-only, Epic 0 | ✅ resolvida — ADR 0006 |
+| 2.4 | Telefone como identificador; conta criada presencialmente | ADR autenticação, Epic 0 | ✅ resolvida — ADR 0007 |
+| 2.13 | Conversão só por lançamento explícito | ADR valor monetário, Epic 0 | ✅ resolvida — ADR 0004 |
+| 2.11 | AGPL vs. coopyleft, com limites explícitos | ADR licença, Epic 0 | ✅ resolvida — ADR 0001 |
+| 2.9 | Quem vê pageview | Epic 0.7 | ✅ resolvida — ADR 0008 |
 | 2.7 | CEP e consentimento coletivo | Processo | Epic 3 subir |
 | 2.5 | Capacidade agregada visível a todos os membros | Epic 2.5 | Epic 2 |
 | 2.12 | Export em zip com imagens | Epic 1.5 | Epic 1 |

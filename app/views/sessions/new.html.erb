@@ -1,0 +1,22 @@
+<% content_for :title, "Entrar — Feira Solidária" %>
+<h1>Entrar</h1>
+
+<%= form_with url: session_path, class: "formulario" do |form| %>
+  <div class="campo">
+    <%= form.label :phone, "Seu telefone (o do WhatsApp)" %>
+    <%= form.telephone_field :phone, required: true, autofocus: true, autocomplete: "tel",
+          inputmode: "tel", placeholder: "(13) 99999-9999" %>
+  </div>
+
+  <div class="campo">
+    <%= form.label :password, "Sua senha" %>
+    <%= form.password_field :password, required: true, autocomplete: "current-password" %>
+  </div>
+
+  <%= form.submit "Entrar", class: "botao" %>
+<% end %>
+
+<p class="ajuda">
+  Esqueceu a senha? Fale com a coordenação da feira: a senha é redefinida
+  pessoalmente.
+</p>

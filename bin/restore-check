@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Prova que um backup restaura (Epic 0.8: backup não testado não é backup).
+#   bin/restore-check /var/backups/feira/db-2026-08-25-0300.dump
+# Sobe um Postgres descartável em Docker, restaura o dump, conta linhas das
+# tabelas principais e derruba tudo. Registrar o resultado em docs/operacao/.
+set -euo pipefail
+
+DUMP="${1:?uso: bin/restore-check caminho/do/arquivo.dump}"
+NAME="feira-restore-check-$$"
+IMAGE="${PG_IMAGE:-postgres:16-alpine}"
+
+cleanup() { docker rm -f "$NAME" >/dev/null 2>&1 || true; }
+trap cleanup EXIT
+
+echo "→ subindo $IMAGE como $NAME"
+docker run -d --name "$NAME" -e POSTGRES_PASSWORD=restore -e POSTGRES_DB=restore "$IMAGE" >/dev/null
+for _ in $(seq 1 30); do
+  docker exec "$NAME" pg_isready -U postgres -q && break
+  sleep 1
+done
+
+START=$(date +%s)
+echo "→ restaurando $(du -h "$DUMP" | cut -f1) de $DUMP"
+docker exec -i "$NAME" pg_restore -U postgres -d restore --no-owner --no-privileges < "$DUMP"
+END=$(date +%s)
+
+echo "→ contagens:"
+docker exec "$NAME" psql -U postgres -d restore -Atc "
+  SELECT 'users: '  || count(*) FROM users
+  UNION ALL SELECT 'events: ' || count(*) FROM events
+  UNION ALL SELECT 'page_views: ' || count(*) FROM page_views
+  UNION ALL SELECT 'trigger events_append_only: ' || count(*) FROM pg_trigger WHERE tgname = 'events_append_only';"
+
+echo "→ restore concluído em $((END - START))s"

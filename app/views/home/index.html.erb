@@ -1,0 +1,10 @@
+<h1>Feira Solidária</h1>
+<p>
+  Rede de empreendimentos de economia solidária da Baixada Santista.
+  A plataforma está em construção.
+</p>
+<% if authenticated? %>
+  <p>Você está conectado como <strong><%= Current.user.name %></strong>.</p>
+<% else %>
+  <p><%= link_to "Entrar", new_session_path, class: "botao" %></p>
+<% end %>
