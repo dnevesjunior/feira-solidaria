@@ -11,6 +11,6 @@ development:
 test:
   <<: *default
 
+# Solid Cache no banco primário (ADR 0003): sem `database:`.
 production:
-  database: cache
   <<: *default
