@@ -143,7 +143,7 @@ Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?*
 
 | Critério | Estado | Prova |
 |---|---|---|
-| `git push` na `main` → site no ar | ⚠️ parcial | App no ar via `kamal deploy` da máquina do autor; o job de deploy do CI depende de duas ações pendentes do autor (chave do CI no host via `bin/host-setup`; acesso do repositório ao pacote no GHCR) |
+| `git push` na `main` → site no ar | ✅ | CI run 32810970341: testes → build → GHCR → `kamal deploy`; contêiner no ar com o SHA do commit. `https://feira.reciboemdia.com.br` com TLS (Let's Encrypt) |
 | Dev novo clona, roda um comando, tem ambiente com seed | ✅ | `bin/setup` + `db/seeds/pessoas.rb` |
 | 10 reais + 10 chiquinhos levanta exceção | ✅ | `spec/models/amount_spec.rb` |
 | Evento não pode ser alterado nem apagado | ✅ | `spec/models/event_spec.rb` (ActiveRecord e trigger SQL) |
@@ -153,10 +153,9 @@ Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?*
 | Nenhum float no schema | ✅ | `spec/schema/no_float_spec.rb` |
 | Isolamento por empreendimento preparado | ✅ | `spec/schema/enterprise_scope_spec.rb` |
 
-Pendências operacionais (não bloqueiam o Epic 1): DNS de
-`feira.reciboemdia.com.br`, certificado TLS, destino do backup remoto
-(Backblaze B2 ou outro), e a migração para VPS dedicado antes do Epic 3
-(ADR 0003).
+Pendências operacionais (não bloqueiam o Epic 1): destino do backup remoto
+(Backblaze B2 ou outro — hoje só cópia local em `/var/backups/feira`) e a
+migração para VPS dedicado antes do Epic 3 (ADR 0003).
 
 ### Quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?
 
