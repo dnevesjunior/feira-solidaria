@@ -16,7 +16,8 @@ scp -q "$HERE/docs/operacao/nginx-feira.conf" "$TARGET:/tmp/feira-nginx.conf"
 scp -q "$HERE/bin/backup" "$TARGET:/tmp/feira-backup"
 
 echo "→ configurando o host"
-ssh "$TARGET" bash -s "$SITE" "$PUB" <<'REMOTE'
+# A chave tem espaços: vai entre aspas simples para o shell remoto não a dividir.
+ssh "$TARGET" bash -s "$SITE" "'$PUB'" <<'REMOTE'
 set -euo pipefail
 SITE="$1"; PUB="$2"
 
