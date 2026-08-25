@@ -5,7 +5,8 @@
   <div class="campo">
     <%= form.label :phone, "Seu telefone (o do WhatsApp)" %>
     <%= form.telephone_field :phone, required: true, autofocus: true, autocomplete: "tel",
-          inputmode: "tel", placeholder: "(13) 99999-9999" %>
+          inputmode: "tel", placeholder: "(13) 99999-9999", maxlength: 15,
+          data: { controller: "phone-mask", action: "input->phone-mask#format" } %>
   </div>
 
   <div class="campo">
