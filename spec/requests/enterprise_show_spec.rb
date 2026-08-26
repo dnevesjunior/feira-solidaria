@@ -25,6 +25,12 @@ RSpec.describe "Vitrine pública" do
     expect(response.body).to include("Não achamos «doces-da-cidda»", "autofocus")
   end
 
+  it "responde 404 seco para formatos que não são HTML" do
+    get "/doces-da-cidda.xml"
+    expect(response).to have_http_status(:not_found)
+    expect(response.body).to be_blank
+  end
+
   it "é leve: HTML + CSS + JS abaixo de 100 KB comprimidos, sem imagens (≈ 2 s em 3G)" do
     get "/doces-da-cida"
     html = response.body

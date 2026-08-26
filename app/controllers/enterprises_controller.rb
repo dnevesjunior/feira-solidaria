@@ -14,6 +14,8 @@ class EnterprisesController < ApplicationController
   private
 
   def render_not_found
+    # Só HTML tem página de 404 amigável; bots pedindo .xml/.json recebem 404 seco.
+    return head :not_found unless request.format.html?
     @missing_slug = params[:slug]
     @search = @missing_slug.tr("-", " ")
     @enterprises = PublishedEnterprisesQuery.call(search: @search)

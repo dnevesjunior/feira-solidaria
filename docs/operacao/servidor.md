@@ -9,7 +9,7 @@
 | Compartilhado com | `staging.terapiaconecta.com.br` (nginx + Rails + MySQL) |
 | Domínio | `feira.reciboemdia.com.br` → nginx do host → `127.0.0.1:8080` (kamal-proxy) |
 | Contêineres | `feira-web-*` (app), `feira-db` (PostgreSQL 16), `kamal-proxy` |
-| Dados | `/var/lib/feira/postgres`, `/var/lib/feira/storage` |
+| Dados | `/var/lib/feira/postgres`, `/var/lib/feira/storage` (dono uid 1000 = usuário `rails` do contêiner; sem isso, upload de foto dá 500) |
 | Backups | `/var/backups/feira` (30 dias), script `/opt/feira/bin/backup`, cron 03:00 |
 
 **Este servidor não serve ao piloto com famílias reais.** Antes do Epic 3

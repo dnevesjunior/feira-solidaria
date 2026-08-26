@@ -26,7 +26,9 @@ grep -qF "$PUB" ~/.ssh/authorized_keys || echo "$PUB" >> ~/.ssh/authorized_keys
 echo "  chave do CI: ok"
 
 mkdir -p /var/lib/feira/postgres /var/lib/feira/storage /var/backups/feira /opt/feira/bin
-echo "  diretórios: ok"
+# O contêiner do app roda como uid 1000 (Dockerfile); o bind mount precisa ser dele.
+chown 1000:1000 /var/lib/feira/storage
+echo "  diretórios: ok (storage pertence ao uid 1000, o usuário do contêiner)"
 
 install -m 644 /tmp/feira-nginx.conf "/etc/nginx/sites-available/$SITE"
 ln -sf "/etc/nginx/sites-available/$SITE" "/etc/nginx/sites-enabled/$SITE"
