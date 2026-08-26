@@ -15,11 +15,11 @@ RSpec.describe PublishedEnterprisesQuery do
 
   it "muda a ordem de um dia para o outro, e é igual dentro do mesmo dia" do
     a = described_class.call(date: Date.new(2026, 8, 25)).map(&:id)
-    b = described_class.call(date: Date.new(2026, 8, 26)).map(&:id)
     c = described_class.call(date: Date.new(2026, 8, 25)).map(&:id)
     expect(a).to eq(c)
-    expect(a).not_to eq(b)
-    expect(a.sort).to eq(b.sort)
+    orders = (1..6).map { |d| described_class.call(date: Date.new(2026, 8, d)).map(&:id) }
+    expect(orders.uniq.size).to be > 1
+    expect(orders.map(&:sort).uniq.size).to eq(1)
   end
 
   it "não ordena por nome nem por cadastro" do

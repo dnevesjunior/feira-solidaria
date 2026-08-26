@@ -20,10 +20,10 @@ RSpec.describe "Catálogo e capacidade da rede" do
     it "lista só publicados de lojas publicadas, em ordem rotativa" do
       names = described_class.call.map(&:name)
       expect(names).to contain_exactly("Pão de queijo", "Pão de Queijo", "Broa", "Sabão")
-      a = described_class.call(date: Date.new(2026, 8, 25)).map(&:id)
-      b = described_class.call(date: Date.new(2026, 8, 26)).map(&:id)
-      expect(a).not_to eq(b)
-      expect(a.sort).to eq(b.sort)
+      # Com poucos itens, duas datas podem coincidir por acaso; seis não.
+      orders = (1..6).map { |d| described_class.call(date: Date.new(2026, 8, d)).map(&:id) }
+      expect(orders.uniq.size).to be > 1
+      expect(orders.map(&:sort).uniq.size).to eq(1)
     end
 
     it "busca por nome sem acento" do
