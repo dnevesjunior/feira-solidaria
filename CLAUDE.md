@@ -211,7 +211,7 @@ Não deixe isso morrer em mensagem de commit.
 | # | Epic | Estado |
 |---|---|---|
 | 0 | Fundação | implementado (ago/2026) |
-| 1 | Empreendimento e vitrine | implementado (ago/2026) — pendente teste em celular real |
+| 1 | Empreendimento e vitrine | implementado (ago/2026) |
 | 2 | Catálogo com capacidade declarada | implementado (ago/2026) |
 | 3 | Roteamento de pedido | especificado — **fim da v1** |
 | 4 | Pedido coletivo | a especificar |
@@ -219,7 +219,9 @@ Não deixe isso morrer em mensagem de commit.
 | 6 | Chiquinho (moeda) | a especificar |
 | 7 | Camada de observação | a especificar |
 
-**A v1 termina no Epic 3.** Colocar no ar, medir, e só então seguir. A moeda vem
+**A v1 termina no Epic 3.** É construída como prova de conceito, apresentada primeiro à
+coordenadora da feira; testes com pessoas da feira são condição do piloto (nota de
+sequência no encerramento do Epic 1). Colocar no ar, medir, e só então seguir. A moeda vem
 *depois* da governança (Epic 6 depois do 5) porque as regras da moeda são a
 primeira coisa que a assembleia deve deliberar.
 

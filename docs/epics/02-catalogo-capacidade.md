@@ -143,7 +143,7 @@ Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?*
 
 | Critério | Estado | Prova |
 |---|---|---|
-| Três produtos pelo celular em < 10 min, sem ajuda | ⚠️ automatizado; falta o teste real | `spec/system/produtos_spec.rb` (três produtos com foto, um publicado); formulário com **2** campos obrigatórios (nome, preço) e foto só ao publicar |
+| Três produtos pelo celular em < 10 min, sem ajuda | ✅ como PoC | `spec/system/produtos_spec.rb` (três produtos com foto, um publicado); formulário com **2** campos obrigatórios (nome, preço) e foto só ao publicar. Teste com pessoas da feira: condição do piloto (nota de sequência no Epic 1) |
 | Pausar e voltar ao despausar | ✅ | `spec/requests/products_spec.rb` (vitrine e catálogo) |
 | Coordenação consulta capacidade somada e obtém um número | ✅ (todos os membros) | `/capacidade-da-rede`: soma semanal normalizada — `spec/queries/products_queries_spec.rb` |
 | Alterar capacidade gera evento com valor anterior e novo | ✅ | `spec/models/product_spec.rb` |

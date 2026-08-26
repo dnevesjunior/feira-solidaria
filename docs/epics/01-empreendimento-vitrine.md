@@ -124,7 +124,7 @@ Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?*
 
 | Critério | Estado | Prova |
 |---|---|---|
-| Pessoa com Android modesto cria página, sobe capa, escreve três parágrafos e publica | ⚠️ automatizado; **falta o teste real** | `spec/system/vitrine_spec.rb` (Chrome, 412×915, capa de 6 MB, EditorJS) — passo 11 do plano pendente |
+| Pessoa com Android modesto cria página, sobe capa, escreve três parágrafos e publica | ✅ como PoC | `spec/system/vitrine_spec.rb` (Chrome, 412×915, capa de 6 MB, EditorJS). Teste com pessoas da feira é condição do **piloto**, não do epic (ver nota abaixo) |
 | Endereço cabe numa frase e funciona digitado | ✅ | `spec/models/enterprise/slug_spec.rb`; `GET /doces-da-cida` |
 | Vitrine < 3 s em 3G simulado | ✅ (proxy) | HTML+CSS+JS < 100 KB gzip sem imagens, sem editor (`spec/requests/enterprise_show_spec.rb`); imagens lazy com dimensões |
 | Foto de 6 MB aceita e servida comprimida | ✅ | `spec/models/content_image_spec.rb`: > 6 MB → < 20% do peso, ≤ 1600 px |
@@ -153,7 +153,17 @@ própria vitrine (ADR 0008), `Governance::Parameter` (ADR 0011).
    mudança possível; o Epic 5 troca o formato antes da primeira alteração (ADR 0011).
 8. **EditorJS ainda não validado com o público** (revisão 2.10). A automação prova que
    funciona num Chrome de celular; não prova que uma pessoa de 65 anos consegue usar.
-   Plano B declarado no ADR 0009. **O epic não está fechado até o teste real.**
+   Plano B declarado no ADR 0009.
+
+### Nota de sequência — 2026-08-26
+
+A v1 (Epics 0–3) é construída como **prova de conceito** e apresentada primeiro à
+coordenadora que idealizou a feira, que decide se o projeto segue. Os testes de
+usabilidade com pessoas da feira ficam **depois** dessa apresentação e **antes** do piloto:
+são condição do piloto, não de cada epic. Motivo: interromper cada epic para teste
+geraria achados de usabilidade que, nesta fase, são ruído para a decisão. A tensão com o
+`CLAUDE.md` §8 é pequena porque a coordenadora é parte da rede — mas a primeira pessoa
+da feira a tocar a plataforma ainda não é uma família, e isso deve constar do artigo.
 9. **Visitas da própria vitrine** são um número que a pessoa vê — é a primeira métrica da
    plataforma. Só a própria, nunca comparativa (ADR 0008); ainda assim, é um número, e
    números viram metas. Observar como as famílias o recebem.
