@@ -4,7 +4,7 @@ default: &default
       batch_size: 500
   workers:
     - queues: "*"
-      threads: 3
+      threads: 2 # 1 vCPU e um pool compartilhado com a web: jobs de imagem não podem afogar requisições
       processes: <%= ENV.fetch("JOB_CONCURRENCY", 1) %>
       polling_interval: 1
 

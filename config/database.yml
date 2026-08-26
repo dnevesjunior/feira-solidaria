@@ -8,7 +8,11 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Web (RAILS_MAX_THREADS) + Solid Queue dentro do Puma (worker, dispatcher,
+  # scheduler) dividem este pool. Com 3 threads e jobs de imagem rodando, 3
+  # conexões esgotavam e a web devolvia 500 (ConnectionTimeoutError). DB_POOL
+  # vem do deploy.yml; localmente, threads + 6.
+  max_connections: <%= ENV.fetch("DB_POOL") { ENV.fetch("RAILS_MAX_THREADS", 5).to_i + 6 } %>
 
 development:
   <<: *default
