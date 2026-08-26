@@ -1,0 +1,36 @@
+<% content_for :title, "Meus produtos — Feira Solidária" %>
+<h1>Meus produtos</h1>
+<p class="ajuda"><%= Current.enterprise.name %></p>
+<p><%= link_to "Cadastrar produto", new_my_enterprise_product_path, class: "botao" %></p>
+
+<% { "published" => "No ar", "paused" => "Em pausa", "draft" => "Rascunhos" }.each do |status, title| %>
+  <% next if @groups[status].empty? %>
+  <h2><%= title %></h2>
+  <ul class="lista-simples">
+    <% @groups[status].each do |product| %>
+      <li class="linha-produto">
+        <% if product.photos.attached? %>
+          <%= image_tag product.photos.first.variant(:thumb), alt: "", width: 56, height: 56 %>
+        <% end %>
+        <span class="card-texto">
+          <strong><%= product.name %></strong>
+          <span><%= product.price %> / <%= product.sale_unit %><% if product.capacity_quantity %> · <%= product.capacity_label %><% end %></span>
+        </span>
+        <span class="acoes-linha">
+          <%= link_to "Editar", edit_my_enterprise_product_path(product) %>
+          <% case status %>
+          <% when "draft", "paused" %>
+            <%= button_to status == "draft" ? "Publicar" : "Despausar", (status == "draft" ? publish_my_enterprise_product_path(product) : unpause_my_enterprise_product_path(product)), class: "link" %>
+          <% when "published" %>
+            <%= button_to "Pausar", pause_my_enterprise_product_path(product), class: "link", data: { turbo_confirm: "Pausar «#{product.name}»? Ele some da sua página até você despausar." } %>
+          <% end %>
+          <%= button_to "Excluir", my_enterprise_product_path(product), method: :delete, class: "link", data: { turbo_confirm: "Excluir «#{product.name}»? Não dá para desfazer." } %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+<% if @products.empty? %>
+  <p>Você ainda não cadastrou nenhum produto. Nome, preço e uma foto bastam para começar.</p>
+<% end %>
+<p><%= link_to "Voltar para Minha loja", my_enterprise_path %></p>

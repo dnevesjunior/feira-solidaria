@@ -8,6 +8,7 @@ class EnterprisesController < ApplicationController
     return render_not_found unless @enterprise
     @document = @enterprise.document
     @html = EditorJs::Renderer.new(@document).to_html
+    @products = @enterprise.products.visible.by_name.with_attached_photos
   end
 
   private

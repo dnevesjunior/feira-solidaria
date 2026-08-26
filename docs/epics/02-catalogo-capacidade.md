@@ -54,8 +54,9 @@ Pedido (Epic 3), rateio entre empreendimentos (Epic 4), preço em Chiquinho
   descumprimento, sem métrica de "confiabilidade" — isso seria rating por outro
   nome (`CLAUDE.md` §3.2).
 - Editável a qualquer momento pelo próprio empreendimento, com a alteração
-  registrada em evento (o histórico de capacidade declarada é dado de pesquisa
-  valioso e não custa nada guardar).
+  registrada em evento: a pessoa vê o que declarou ao longo do tempo e recebe
+  isso no export. (Que o histórico também sirva à pesquisa é consequência, não
+  motivo — `CLAUDE.md` §2; revisão 2.8.)
 
 ### 2.3 Categorias
 
@@ -133,3 +134,37 @@ desenvolvedor sozinho.
 ## Ao final do epic
 
 Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?**
+
+---
+
+## Encerramento — 2026-08-26
+
+### Checklist
+
+| Critério | Estado | Prova |
+|---|---|---|
+| Três produtos pelo celular em < 10 min, sem ajuda | ⚠️ automatizado; falta o teste real | `spec/system/produtos_spec.rb` (três produtos com foto, um publicado); formulário com **2** campos obrigatórios (nome, preço) e foto só ao publicar |
+| Pausar e voltar ao despausar | ✅ | `spec/requests/products_spec.rb` (vitrine e catálogo) |
+| Coordenação consulta capacidade somada e obtém um número | ✅ (todos os membros) | `/capacidade-da-rede`: soma semanal normalizada — `spec/queries/products_queries_spec.rb` |
+| Alterar capacidade gera evento com valor anterior e novo | ✅ | `spec/models/product_spec.rb` |
+| Catálogo sem ordenação derivada de vendas/cliques/perfil | ✅ | spec de tese sobre o SQL do `PublishedProductsQuery` |
+| Export inclui produtos e histórico de capacidade | ✅ | `produtos.json` + `imagens/produto-*` |
+
+### Quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?
+
+1. **Normalização mensal por 12 ÷ 52 com divisão inteira** é aproximação apresentada como
+   número. A página diz "aproximado"; o Epic 4 deve tratar como estimativa (ADR 0013).
+2. **Foto obrigatória para publicar** pode travar quem não tem foto boa. Rascunho salva
+   sem foto; a orientação no formulário é provisória até o material do grupo de
+   comunicação comunitária.
+3. **Capacidade da rede visível a todos os membros** expõe cada declaração (somada por
+   produto). Coerente com cooperação; pode constranger ("declarei pouco"). Observar.
+4. **Produto sem página própria** dificulta compartilhar um item no WhatsApp; o link é da
+   loja com âncora (ADR 0014).
+5. **Unidade de venda livre** gera variação de grafia. Aceito: o vocabulário da feira vale
+   mais que uma taxonomia limpa; a agregação é por nome de produto.
+6. **Categorias adiadas** = catálogo sem filtro até a feira definir a lista.
+7. **Preço digitado em pt-BR sem máscara**; "12.50" é recusado com mensagem. Avaliar no
+   teste real se precisa de máscara.
+8. **A vitrine agora mostra preço** — é o primeiro dado "de mercado" público. Sem
+   comparação, sem média, sem ordenação por preço, de propósito.

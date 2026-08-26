@@ -1,0 +1,17 @@
+<%# Card de produto: na vitrine (sem link) e no catálogo (link para a loja). %>
+<li id="produto-<%= product.id %>" class="card card-produto">
+  <% if product.photos.attached? %>
+    <%= image_tag product.photos.first.variant(:thumb), alt: "", width: 160, height: 160, loading: "lazy" %>
+  <% else %>
+    <span class="card-sem-foto" aria-hidden="true"><%= product.name.first %></span>
+  <% end %>
+  <span class="card-texto">
+    <strong><%= product.name %></strong>
+    <span class="preco"><%= product.price %> <span class="ajuda">/ <%= product.sale_unit %></span></span>
+    <% if product.description.present? %><span><%= truncate(product.description, length: 140) %></span><% end %>
+    <% if product.lead_time_days.present? %><span class="ajuda">Prazo: <%= product.lead_time_days %> <%= product.lead_time_days == 1 ? "dia" : "dias" %></span><% end %>
+    <% if link %>
+      <%= link_to product.enterprise.name, enterprise_path(product.enterprise.slug, anchor: "produto-#{product.id}"), class: "card-loja" %>
+    <% end %>
+  </span>
+</li>

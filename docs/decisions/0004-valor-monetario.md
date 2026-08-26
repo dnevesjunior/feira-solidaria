@@ -54,7 +54,9 @@ exige tocar nele, e é isso que o torna útil.
 ## Consequências
 
 - Todo campo monetário em migrations futuras é `bigint` com sufixo `_cents` (reais) ou
-  `_chiquinhos`; o nome carrega a unidade, e o atributo no modelo declara o tipo.
+  `_chiquinhos`; o nome carrega a unidade, e o modelo declara o tipo **sobre a coluna**
+  (`attribute :price_cents, :amount, unit: :brl`), que passa a ler e escrever `Amount`.
+  Um alias de domínio (`price`) dá o nome curto; o writer recusa `Amount` de outra unidade.
 - O Epic 6 herda a proibição de aritmética entre unidades e deve modelar a conversão como
   lançamento explícito.
 

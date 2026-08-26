@@ -21,6 +21,17 @@
     <%= @html %>
   </div>
 
+  <% if @products.present? %>
+    <section class="produtos" id="produtos">
+      <h2>O que fazemos</h2>
+      <ul class="cards">
+        <% @products.each do |product| %>
+          <%= render "products/card", product:, link: false %>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
   <footer class="contato">
     <h2>Fale com a gente</h2>
     <p>

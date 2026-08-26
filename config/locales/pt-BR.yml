@@ -18,6 +18,14 @@ pt-BR:
     removed: "Pessoa removida."
   fair_events:
     saved: "Próxima feira salva."
+  products:
+    created: "Produto salvo como rascunho. Publique quando quiser que apareça na sua página."
+    saved: "Produto salvo."
+    published: "Produto publicado."
+    paused: "Produto em pausa. Ele some da sua página até você despausar."
+    unpaused: "Produto de volta à sua página."
+    removed: "Produto excluído."
+    photo_removed: "Foto removida."
   time:
     formats:
       fair: "%A, %d de %B, às %H:%M"
@@ -51,6 +59,12 @@ pt-BR:
       fair_event:
         one: "Feira"
         other: "Feiras"
+      product:
+        one: "Produto"
+        other: "Produtos"
+      category:
+        one: "Categoria"
+        other: "Categorias"
     attributes:
       enterprise:
         name: "Nome do empreendimento"
@@ -64,6 +78,17 @@ pt-BR:
         cover_image: "Foto de capa"
       content_image:
         file: "Foto"
+      product:
+        name: "Nome do produto"
+        description: "Descrição"
+        price_cents: "Preço"
+        price: "Preço"
+        sale_unit: "Unidade de venda"
+        photos: "Fotos"
+        capacity_quantity: "Capacidade"
+        capacity_period: "Período"
+        lead_time_days: "Prazo de entrega"
+        category: "Categoria"
       fair_event:
         starts_at: "Início"
         ends_at: "Fim"

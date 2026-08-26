@@ -39,6 +39,7 @@ class MyEnterprise::EnterprisesController < MyEnterprise::BaseController
     @enterprise = enterprise
     @document = @enterprise.document
     @html = EditorJs::Renderer.new(@document).to_html
+    @products = @enterprise.products.visible.by_name.with_attached_photos
     @preview = true
     render "enterprises/show"
   end

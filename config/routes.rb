@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   resources :fair_events, path: "proxima-feira", only: %i[ index new create edit update ],
     path_names: { new: "nova", edit: "editar" }
 
+  # Catálogo da feira e capacidade da rede (Epic 2).
+  get "produtos", to: "catalog#index", as: :catalog
+  get "capacidade-da-rede", to: "network_capacity#index", as: :network_capacity
+
   # Minha loja: tudo escopado por Current.enterprise (ADR 0005).
   scope path: "minha-loja", module: :my_enterprise, as: :my_enterprise do
     get "/", to: "enterprises#show", as: ""
@@ -24,6 +28,14 @@ Rails.application.routes.draw do
     post "escolher", to: "choices#create", as: :choose
     resources :memberships, path: "membros", only: %i[ index create destroy ]
     resources :content_images, path: "imagens", only: %i[ create ]
+    resources :products, path: "produtos", except: %i[ show ], path_names: { new: "novo", edit: "editar" } do
+      member do
+        post :publish, path: "publicar"
+        post :pause, path: "pausar"
+        post :unpause, path: "despausar"
+      end
+      resources :photos, path: "fotos", only: %i[ destroy ], controller: "product_photos"
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -38,4 +38,16 @@ module Event::Catalog
   register "content_image.removed", description: "Foto removida do conteúdo da vitrine.", payload_keys: %w[content_image_id]
   register "fair_event.created", description: "Próxima feira cadastrada (data e local)."
   register "fair_event.updated", description: "Próxima feira alterada."
+
+  # --- Epic 2 ---------------------------------------------------------------
+  register "product.created", description: "Produto cadastrado (em rascunho)."
+  register "product.updated", description: "Produto alterado. Só os nomes dos campos.", payload_keys: %w[changed]
+  register "product.published", description: "Produto publicado na vitrine e no catálogo."
+  register "product.paused", description: "Produto pausado: \"não estou produzindo isso agora\". Não é falta de estoque."
+  register "product.unpaused", description: "Produto voltou a ser produzido."
+  register "product.removed", description: "Produto excluído pelo empreendimento.", payload_keys: %w[product_id]
+  register "product.capacity_changed",
+    description: "Capacidade declarada alterada, com valor anterior e novo. É declaração, não contrato (ADR 0013).",
+    payload_keys: %w[quantity_from quantity_to period_from period_to]
+  register "product.photo_removed", description: "Foto de produto removida."
 end

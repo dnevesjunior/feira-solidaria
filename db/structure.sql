@@ -152,6 +152,39 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    slug character varying NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
 -- Name: content_images; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -422,6 +455,46 @@ CREATE SEQUENCE public.page_views_id_seq
 --
 
 ALTER SEQUENCE public.page_views_id_seq OWNED BY public.page_views.id;
+
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    enterprise_id bigint NOT NULL,
+    category_id bigint,
+    name character varying NOT NULL,
+    description text,
+    price_cents bigint NOT NULL,
+    sale_unit character varying DEFAULT 'unidade'::character varying NOT NULL,
+    status character varying DEFAULT 'draft'::character varying NOT NULL,
+    capacity_quantity integer,
+    capacity_period character varying DEFAULT 'week'::character varying NOT NULL,
+    lead_time_days integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
@@ -996,6 +1069,13 @@ ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET DEFAU
 
 
 --
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
 -- Name: content_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1049,6 +1129,13 @@ ALTER TABLE ONLY public.memberships ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.page_views ALTER COLUMN id SET DEFAULT nextval('public.page_views_id_seq'::regclass);
+
+
+--
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
 
 
 --
@@ -1196,6 +1283,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: content_images content_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1257,6 +1352,14 @@ ALTER TABLE ONLY public.memberships
 
 ALTER TABLE ONLY public.page_views
     ADD CONSTRAINT page_views_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
 
 
 --
@@ -1424,6 +1527,13 @@ CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.ac
 
 
 --
+-- Name: index_categories_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_categories_on_slug ON public.categories USING btree (slug);
+
+
+--
 -- Name: index_content_images_on_enterprise_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1519,6 +1629,34 @@ CREATE INDEX index_memberships_on_user_id ON public.memberships USING btree (use
 --
 
 CREATE UNIQUE INDEX index_page_views_on_path_and_day ON public.page_views USING btree (path, day);
+
+
+--
+-- Name: index_products_on_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_category_id ON public.products USING btree (category_id);
+
+
+--
+-- Name: index_products_on_enterprise_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_enterprise_id ON public.products USING btree (enterprise_id);
+
+
+--
+-- Name: index_products_on_enterprise_id_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_enterprise_id_and_name ON public.products USING btree (enterprise_id, name);
+
+
+--
+-- Name: index_products_on_enterprise_id_and_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_products_on_enterprise_id_and_status ON public.products USING btree (enterprise_id, status);
 
 
 --
@@ -1868,6 +2006,14 @@ ALTER TABLE ONLY public.solid_queue_claimed_executions
 
 
 --
+-- Name: products fk_rails_b1294736ac; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_rails_b1294736ac FOREIGN KEY (enterprise_id) REFERENCES public.enterprises(id);
+
+
+--
 -- Name: solid_queue_batch_executions fk_rails_bc9f981155; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1900,12 +2046,22 @@ ALTER TABLE ONLY public.content_images
 
 
 --
+-- Name: products fk_rails_fb915499a4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_rails_fb915499a4 FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260825200002'),
+('20260825200001'),
 ('20260825160006'),
 ('20260825160005'),
 ('20260825160004'),

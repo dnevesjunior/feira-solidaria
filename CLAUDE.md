@@ -212,7 +212,7 @@ Não deixe isso morrer em mensagem de commit.
 |---|---|---|
 | 0 | Fundação | implementado (ago/2026) |
 | 1 | Empreendimento e vitrine | implementado (ago/2026) — pendente teste em celular real |
-| 2 | Catálogo com capacidade declarada | especificado |
+| 2 | Catálogo com capacidade declarada | implementado (ago/2026) |
 | 3 | Roteamento de pedido | especificado — **fim da v1** |
 | 4 | Pedido coletivo | a especificar |
 | 5 | Governança de parâmetros | a especificar |

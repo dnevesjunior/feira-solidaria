@@ -1,0 +1,34 @@
+<% content_for :title, "Produtos — Feira Solidária" %>
+<h1>Produtos da feira</h1>
+
+<%= form_with url: catalog_path, method: :get, class: "busca", data: { turbo: false } do |form| %>
+  <label for="q" class="visualmente-oculto">Buscar produto pelo nome</label>
+  <%= form.search_field :q, id: "q", value: @search, placeholder: "Buscar pelo nome" %>
+  <% if @category %><%= form.hidden_field :categoria, value: @category.slug %><% end %>
+  <%= form.submit "Buscar", class: "botao botao-secundario" %>
+<% end %>
+
+<% if @categories.any? %>
+  <nav class="filtros">
+    <%= link_to "Todos", catalog_path(q: @search.presence), class: ("ativo" unless @category) %>
+    <% @categories.each do |c| %>
+      <%= link_to c.name, catalog_path(categoria: c.slug, q: @search.presence), class: ("ativo" if @category == c) %>
+    <% end %>
+  </nav>
+<% end %>
+
+<% if @products.empty? %>
+  <p><%= @search.present? ? "Nenhum produto com «#{@search}»." : "Ainda não há produtos publicados." %></p>
+<% else %>
+  <ul class="cards">
+    <% @products.each do |product| %>
+      <%= render "products/card", product:, link: true %>
+    <% end %>
+  </ul>
+<% end %>
+
+<p class="ajuda regra-ordem">
+  A ordem dos produtos muda todo dia e não depende de vendas, cliques ou de quem
+  chegou primeiro. Semente de hoje: <code><%= @ordering_seed %></code>.
+  Para comprar, fale direto com o empreendimento.
+</p>

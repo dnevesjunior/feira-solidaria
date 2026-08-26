@@ -263,7 +263,7 @@ acompanhamento.
 | 2.10 | Validar EditorJS em celular real | Epic 1.3 | ⏳ implementado com plano B declarado (ADR 0009); aguarda teste em celular real |
 | 2.3 | Modelar `order.routed` honestamente | Epic 3 | Epic 3 |
 | 2.6 | Critério de sucesso: "mais, dentro da capacidade" | `CLAUDE.md` §2 | Medição da v1 |
-| 2.8 | Reescrever justificativa de `capacity_changed` | Epic 2.2 | — |
+| 2.8 | Reescrever justificativa de `capacity_changed` | Epic 2.2 | ✅ resolvida — ADR 0013: histórico justificado pelo uso (a pessoa vê o que declarou; vai no export) |
 | 2.2 | Rateio como proposta, não execução | Epic 4 | Epic 4 |
 | 3 | "Próxima feira" no hub | Epic 1.2 | ✅ resolvida — Epic 1: `FairEvent` no hub |
 

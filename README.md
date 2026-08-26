@@ -46,6 +46,7 @@ Testes: `bundle exec rspec`. Lint: `bin/rubocop`. Segurança: `bin/brakeman`.
 | `app/models/editor_js/` | `Document` (validação por allowlist) e `Renderer` (JSON → HTML). |
 | `app/models/enterprise_export.rb` | Export completo em zip: dados, vitrine, eventos, imagens. |
 | `app/models/governance/` | Parâmetros de governança em banco com default declarado. |
+| `app/models/product.rb`, `product/capacity.rb` | Produto com preço em `Amount` e capacidade declarada (normalizada para semana). |
 | `vendor/javascript/` | EditorJS vendorizado (sem CDN). |
 | `spec/schema/` | Testes de tese: nenhum float, todo modelo com `enterprise_id` é escopado. |
 
@@ -55,6 +56,10 @@ Quem tem conta cria o próprio empreendimento em `/minha-loja/nova`, escreve a
 página em `/minha-loja/editar` (EditorJS: parágrafo, título, lista, citação,
 foto) e publica quando quiser. A vitrine pública fica em `/<endereco>`. Tudo o
 que a plataforma guarda sobre o empreendimento sai em `/minha-loja/exportar`.
+
+Produtos ficam em `/minha-loja/produtos` (nome e preço bastam; foto para
+publicar; capacidade declarada opcional). Catálogo público em `/produtos`;
+capacidade somada da rede em `/capacidade-da-rede` (membros).
 
 Fotos precisam de `libvips` no sistema (`sudo apt install libvips42`).
 

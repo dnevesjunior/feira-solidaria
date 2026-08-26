@@ -1,0 +1,31 @@
+<% content_for :title, "Capacidade da rede — Feira Solidária" %>
+<h1>Capacidade da rede</h1>
+<p>
+  Quanto a rede consegue produzir <strong>por semana</strong>, somando o que cada
+  empreendimento declarou. São declarações aproximadas — "mais ou menos" —,
+  não compromissos.
+</p>
+
+<% if @categories.any? %>
+  <nav class="filtros">
+    <%= link_to "Tudo", network_capacity_path, class: ("ativo" unless @category) %>
+    <% @categories.each do |c| %>
+      <%= link_to c.name, network_capacity_path(categoria: c.slug), class: ("ativo" if @category == c) %>
+    <% end %>
+  </nav>
+<% end %>
+
+<% if @rows.empty? %>
+  <p>Nenhum produto publicado com capacidade declarada ainda.</p>
+<% else %>
+  <table class="tabela">
+    <thead><tr><th>Produto</th><th>Por semana</th><th>Empreendimentos</th></tr></thead>
+    <tbody>
+      <% @rows.each do |row| %>
+        <tr><td><%= row.name %></td><td><%= row.weekly_total %></td><td><%= row.enterprises %></td></tr>
+      <% end %>
+    </tbody>
+    <tfoot><tr><th>Total</th><th><%= @total %></th><th></th></tr></tfoot>
+  </table>
+  <p class="ajuda">Produtos com o mesmo nome em lojas diferentes são somados. Quem não declarou capacidade não entra na conta.</p>
+<% end %>

@@ -1,0 +1,15 @@
+<% content_for :title, "Editar produto — Feira Solidária" %>
+<h1>Editar produto</h1>
+<% if @product.capacity_history.any? %>
+  <details class="detalhes">
+    <summary>O que você já declarou de capacidade</summary>
+    <ul class="lista-simples">
+      <% @product.capacity_history.each do |e| %>
+        <li><span class="ajuda"><%= l(e.occurred_at, format: :short) %></span>
+          <%= e.payload["quantity_from"] || "—" %> <%= Product::Capacity.label(e.payload["period_from"]) %>
+          → <%= e.payload["quantity_to"] || "—" %> <%= Product::Capacity.label(e.payload["period_to"]) %></li>
+      <% end %>
+    </ul>
+  </details>
+<% end %>
+<%= render "form" %>

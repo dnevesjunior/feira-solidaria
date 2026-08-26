@@ -1,0 +1,78 @@
+<%= form_with model: [ :my_enterprise, @product ], class: "formulario" do |form| %>
+  <% if @product.errors.any? %>
+    <ul class="erros">
+      <% @product.errors.full_messages.each do |message| %><li><%= message %></li><% end %>
+    </ul>
+  <% end %>
+
+  <div class="campo">
+    <%= form.label :name, "Nome do produto" %>
+    <%= form.text_field :name, required: true, maxlength: 80, placeholder: "Bolo de fubá com goiabada" %>
+  </div>
+
+  <div class="campo">
+    <%= form.label :price_input, "Preço (em reais)" %>
+    <div class="prefixo"><span>R$</span><%= form.text_field :price_input, required: true, inputmode: "decimal", placeholder: "12,50", pattern: "[0-9.]+(,[0-9]{1,2})?" %></div>
+  </div>
+
+  <div class="campo">
+    <%= form.label :sale_unit, "Vendido por" %>
+    <% custom = @product.sale_unit.present? && !Product::SALE_UNITS.include?(@product.sale_unit) %>
+    <%= form.select :sale_unit, options_for_select(Product::SALE_UNITS.map { |u| [ u, u ] } + [ [ "outra…", "outra" ] ], custom ? "outra" : @product.sale_unit) %>
+    <%= form.text_field :sale_unit_other, value: (custom ? @product.sale_unit : nil), maxlength: 20, placeholder: "se for outra, escreva aqui (ex.: cacho)" %>
+  </div>
+
+  <div class="campo">
+    <%= form.label :photos, "Fotos (até 4)" %>
+    <% if @product.photos.attached? %>
+      <ul class="fotos-produto">
+        <% @product.photos.each do |photo| %>
+          <li>
+            <%= image_tag photo.variant(:thumb), alt: "", width: 96, height: 96 %>
+            <% if @product.persisted? %>
+              <%= button_to "Remover", my_enterprise_product_photo_path(@product, photo), method: :delete, class: "link", form: { data: { turbo_confirm: "Remover esta foto?" } } %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+    <%= form.file_field :photos, multiple: true, accept: "image/jpeg,image/png,image/webp" %>
+    <p class="ajuda">
+      <%# ORIENTAÇÃO PROVISÓRIA — substituir pelo material do grupo de comunicação comunitária. %>
+      Luz do dia, fundo liso, o produto ocupando a foto. Precisa de foto para publicar; para salvar rascunho, não.
+    </p>
+  </div>
+
+  <details class="detalhes" <%= "open" if @product.description.present? || @product.capacity_quantity.present? || @product.lead_time_days.present? %>>
+    <summary>Preencher depois, se quiser</summary>
+
+    <div class="campo">
+      <%= form.label :description, "Descrição curta" %>
+      <%= form.text_area :description, rows: 3, maxlength: 1000 %>
+    </div>
+
+    <div class="campo">
+      <%= form.label :capacity_quantity, "Quanto você consegue fazer, mais ou menos?" %>
+      <div class="capacidade">
+        <%= form.number_field :capacity_quantity, min: 0, step: 1, inputmode: "numeric", placeholder: "10" %>
+        <%= form.select :capacity_period, options_for_select(Product::Capacity::PERIODS.map { |p| [ Product::Capacity.label(p), p ] }, @product.capacity_period) %>
+      </div>
+      <p class="ajuda">É só uma estimativa sua; ninguém cobra isso. Ajuda a rede a saber o que consegue produzir junta.</p>
+    </div>
+
+    <div class="campo">
+      <%= form.label :lead_time_days, "Prazo típico de entrega (dias)" %>
+      <%= form.number_field :lead_time_days, min: 0, max: 365, step: 1, inputmode: "numeric", placeholder: "2" %>
+    </div>
+
+    <% if Category.any? %>
+      <div class="campo">
+        <%= form.label :category_id, "Categoria" %>
+        <%= form.collection_select :category_id, Category.ordered, :id, :name, include_blank: "sem categoria" %>
+      </div>
+    <% end %>
+  </details>
+
+  <%= form.submit @product.persisted? ? "Salvar" : "Salvar produto", class: "botao" %>
+  <%= link_to "Cancelar", my_enterprise_products_path, class: "botao botao-secundario" %>
+<% end %>

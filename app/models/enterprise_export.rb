@@ -19,6 +19,8 @@ class EnterpriseExport
       zip.write(JSON.pretty_generate(@enterprise.content))
       zip.put_next_entry("eventos.json")
       zip.write(JSON.pretty_generate(events_data))
+      zip.put_next_entry("produtos.json")
+      zip.write(JSON.pretty_generate(products_data))
       images.each do |name, blob|
         zip.put_next_entry("imagens/#{name}")
         blob.download { |chunk| zip.write(chunk) }
@@ -51,6 +53,32 @@ class EnterpriseExport
     end
   end
 
+  def products_data
+    @enterprise.products.by_name.includes(:category).map do |product|
+      {
+        "nome" => product.name,
+        "descricao" => product.description,
+        "preco_centavos" => product.price.value,
+        "preco" => product.price.to_s,
+        "unidade_de_venda" => product.sale_unit,
+        "situacao" => { "draft" => "rascunho", "published" => "publicado", "paused" => "pausado" }[product.status],
+        "capacidade" => product.capacity_quantity && { "quantidade" => product.capacity_quantity, "periodo" => product.capacity_period, "por_semana" => product.weekly_capacity },
+        "prazo_de_entrega_dias" => product.lead_time_days,
+        "categoria" => product.category&.name,
+        "fotos" => product_photo_names(product),
+        "historico_de_capacidade" => product.capacity_history.map do |e|
+          { "quando" => e.occurred_at.iso8601, "de" => { "quantidade" => e.payload["quantity_from"], "periodo" => e.payload["period_from"] },
+            "para" => { "quantidade" => e.payload["quantity_to"], "periodo" => e.payload["period_to"] } }
+        end,
+        "criado_em" => product.created_at.iso8601
+      }
+    end
+  end
+
+  def product_photo_names(product)
+    product.photos.each_with_index.map { |photo, i| "produto-#{product.id}-#{i + 1}#{ext(photo.blob)}" }
+  end
+
   def images
     @images ||= begin
       list = {}
@@ -58,6 +86,9 @@ class EnterpriseExport
       list["capa#{ext(@enterprise.cover_image.blob)}"] = @enterprise.cover_image.blob if @enterprise.cover_image.attached?
       @enterprise.content_images.includes(file_attachment: :blob).order(:id).each do |image|
         list["conteudo-#{image.id}#{ext(image.file.blob)}"] = image.file.blob
+      end
+      @enterprise.products.with_attached_photos.order(:id).each do |product|
+        product_photo_names(product).zip(product.photos.map(&:blob)).each { |name, blob| list[name] = blob }
       end
       list
     end
@@ -76,7 +107,8 @@ class EnterpriseExport
       empreendimento.json  dados cadastrais e lista de membros
       vitrine.json         o conteúdo da sua página, no formato em que é guardado (EditorJS)
       eventos.json         o histórico de tudo que aconteceu com o empreendimento na plataforma
-      imagens/             as fotos originais que você enviou
+      produtos.json        seus produtos, com preço, capacidade declarada e o histórico do que você declarou
+      imagens/             as fotos originais que você enviou (página e produtos)
 
       Formato aberto (JSON e JPEG/PNG), legível por qualquer programa.
     TXT

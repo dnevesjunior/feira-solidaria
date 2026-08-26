@@ -25,6 +25,18 @@ class Amount
 
   def self.zero(unit) = new(0, unit)
 
+  # "R$ 1.234,50" | "1234,50" | "12" | "0,5" → Amount em centavos. Inteiros do
+  # começo ao fim: nunca Float. Formato inválido (ex.: "12.50") → nil.
+  BRL_INPUT = /\A(\d{1,3}(?:\.\d{3})*|\d+)(?:,(\d{1,2}))?\z/
+
+  def self.parse_brl(raw)
+    text = raw.to_s.strip.sub(/\AR\$\s*/i, "").delete(" ")
+    match = BRL_INPUT.match(text) or return nil
+    reais = match[1].delete(".").to_i
+    centavos = match[2].to_s.ljust(2, "0").to_i
+    brl(reais * 100 + centavos)
+  end
+
   def initialize(value, unit)
     unless value.is_a?(Integer)
       raise ArgumentError, "valor monetário precisa ser Integer na menor unidade; recebido #{value.class}"
