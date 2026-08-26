@@ -26,7 +26,7 @@
       <h2>O que fazemos</h2>
       <ul class="cards">
         <% @products.each do |product| %>
-          <%= render "products/card", product:, link: false %>
+          <%= render "products/card", product:, link: false, orderable: !@preview %>
         <% end %>
       </ul>
     </section>

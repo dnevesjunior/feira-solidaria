@@ -24,6 +24,7 @@
       <%= link_to "Feira Solidária", root_path, class: "marca" %>
       <nav>
         <%= link_to "Produtos", catalog_path %>
+        <% unless cart.empty? %><%= link_to "Cesta (#{cart.count})", cart_path, class: "cesta-link" %><% end %>
         <% if authenticated? %>
           <span class="ajuda">Olá, <%= Current.user.name.split.first %></span>
           <%= link_to "Minha loja", my_enterprise_path %>

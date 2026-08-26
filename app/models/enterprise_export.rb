@@ -21,6 +21,8 @@ class EnterpriseExport
       zip.write(JSON.pretty_generate(events_data))
       zip.put_next_entry("produtos.json")
       zip.write(JSON.pretty_generate(products_data))
+      zip.put_next_entry("pedidos.json")
+      zip.write(JSON.pretty_generate(orders_data))
       images.each do |name, blob|
         zip.put_next_entry("imagens/#{name}")
         blob.download { |chunk| zip.write(chunk) }
@@ -75,6 +77,25 @@ class EnterpriseExport
     end
   end
 
+  # Dados do comprador só enquanto retidos (ADR 0016).
+  def orders_data
+    @enterprise.orders.includes(:items).order(:id).map do |order|
+      {
+        "codigo" => order.code,
+        "criado_em" => order.created_at.iso8601,
+        "situacao" => { "received" => "recebido", "confirmed" => "confirmado", "completed" => "concluído", "refused" => "recusado", "cancelled" => "cancelado" }[order.status],
+        "whatsapp_aberto_em" => order.routed_at&.iso8601,
+        "encerrado_em" => order.closed_at&.iso8601,
+        "desfecho" => order.outcome && { "full" => "pago e entregue", "partial" => "parcial", "none" => "não" }[order.outcome],
+        "desfecho_observacao" => order.outcome_note,
+        "comprador" => order.buyer_purged_at ? "dados expirados" : { "nome" => order.buyer_name, "whatsapp" => order.buyer_phone, "observacao" => order.buyer_note },
+        "itens" => order.items.map { |i| { "produto" => i.product_name, "quantidade" => i.quantity, "unidade" => i.sale_unit, "preco_unitario" => i.unit_price.to_s, "subtotal" => i.subtotal.to_s } },
+        "total_centavos" => order.total.value,
+        "total" => order.total.to_s
+      }
+    end
+  end
+
   def product_photo_names(product)
     product.photos.each_with_index.map { |photo, i| "produto-#{product.id}-#{i + 1}#{ext(photo.blob)}" }
   end
@@ -108,6 +129,7 @@ class EnterpriseExport
       vitrine.json         o conteúdo da sua página, no formato em que é guardado (EditorJS)
       eventos.json         o histórico de tudo que aconteceu com o empreendimento na plataforma
       produtos.json        seus produtos, com preço, capacidade declarada e o histórico do que você declarou
+      pedidos.json         seus pedidos, com itens, valores, situação e desfecho (dados do comprador só nos últimos 90 dias)
       imagens/             as fotos originais que você enviou (página e produtos)
 
       Formato aberto (JSON e JPEG/PNG), legível por qualquer programa.

@@ -10,6 +10,7 @@ class Enterprise < ApplicationRecord
   has_many :users, through: :memberships
   has_many :content_images, dependent: :destroy
   has_many :products, dependent: :destroy
+  has_many :orders, dependent: :destroy
 
   has_one_attached :profile_image do |attachable|
     attachable.variant :profile, resize_to_fill: [ 400, 400 ], **ImageVariants::JPEG, preprocessed: true

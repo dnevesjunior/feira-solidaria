@@ -1,0 +1,38 @@
+<% content_for :title, "Enviar pedido — Feira Solidária" %>
+<h1>Enviar pedido</h1>
+
+<% if cart.multiple_enterprises? %>
+  <p class="aviso aviso-alert">
+    Serão <strong><%= @groups.size %> pedidos</strong>, um para cada empreendimento:
+    <%= @groups.keys.map(&:name).to_sentence %>. Você vai abrir uma conversa no WhatsApp com cada um.
+  </p>
+<% end %>
+
+<ul class="lista-simples">
+  <% @groups.each do |enterprise, lines| %>
+    <li><strong><%= enterprise.name %></strong> — <%= lines.map { |l| "#{l.quantity} × #{l.product.name}" }.join(", ") %>
+      <span class="preco"><%= lines.map(&:subtotal).reduce(Amount.zero(:brl), :+) %></span></li>
+  <% end %>
+</ul>
+
+<%= form_with url: checkout_path, class: "formulario" do |form| %>
+  <% if @order&.errors&.any? %>
+    <ul class="erros"><% @order.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul>
+  <% end %>
+  <div class="campo">
+    <%= form.label :buyer_name, "Seu nome" %>
+    <%= form.text_field :buyer_name, required: true, maxlength: 80, autocomplete: "name", value: params[:buyer_name] %>
+  </div>
+  <div class="campo">
+    <%= form.label :buyer_phone, "Seu WhatsApp (para a loja falar com você)" %>
+    <%= form.telephone_field :buyer_phone, required: true, inputmode: "tel", autocomplete: "tel", placeholder: "(13) 99999-9999", maxlength: 15,
+          value: params[:buyer_phone], data: { controller: "phone-mask", action: "input->phone-mask#format" } %>
+  </div>
+  <div class="campo">
+    <%= form.label :buyer_note, "Alguma observação? (opcional)" %>
+    <%= form.text_area :buyer_note, rows: 3, maxlength: 500, placeholder: "Para sábado, se der. Retiro na feira.", value: params[:buyer_note] %>
+  </div>
+  <p class="ajuda">Só isso. Não pedimos CPF, endereço nem e-mail. O pagamento você combina com a loja.</p>
+  <%= form.submit "Enviar pedido", class: "botao" %>
+  <%= link_to "Voltar para a cesta", cart_path, class: "botao botao-secundario" %>
+<% end %>

@@ -6,3 +6,6 @@ production:
   purge_error_reports:
     class: PurgeErrorReportsJob
     schedule: every day at 4am
+  purge_buyer_data:
+    class: PurgeBuyerDataJob
+    schedule: every day at 4:30am

@@ -47,6 +47,7 @@ Testes: `bundle exec rspec`. Lint: `bin/rubocop`. Segurança: `bin/brakeman`.
 | `app/models/enterprise_export.rb` | Export completo em zip: dados, vitrine, eventos, imagens. |
 | `app/models/governance/` | Parâmetros de governança em banco com default declarado. |
 | `app/models/product.rb`, `product/capacity.rb` | Produto com preço em `Amount` e capacidade declarada (normalizada para semana). |
+| `app/models/order.rb`, `order/` | Pedido roteado por WhatsApp; mensagem, aviso de capacidade, expurgo. |
 | `vendor/javascript/` | EditorJS vendorizado (sem CDN). |
 | `spec/schema/` | Testes de tese: nenhum float, todo modelo com `enterprise_id` é escopado. |
 
@@ -60,6 +61,15 @@ que a plataforma guarda sobre o empreendimento sai em `/minha-loja/exportar`.
 Produtos ficam em `/minha-loja/produtos` (nome e preço bastam; foto para
 publicar; capacidade declarada opcional). Catálogo público em `/produtos`;
 capacidade somada da rede em `/capacidade-da-rede` (membros).
+
+## Comprar
+
+Sem conta e sem pagamento na plataforma: na vitrine, "Adicionar à cesta" → `/cesta` →
+"Enviar pedido" (só nome e WhatsApp) → página do pedido com o botão que abre o WhatsApp
+do empreendimento com a mensagem pronta. A loja acompanha em `/minha-loja/pedidos` e
+registra o desfecho. Dados do comprador expiram em 90 dias (ADR 0016).
+
+Medição da v1: `bin/rails medicao:v1` + `docs/operacao/linha-de-base.md`.
 
 Fotos precisam de `libvips` no sistema (`sudo apt install libvips42`).
 

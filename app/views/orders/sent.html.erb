@@ -1,0 +1,10 @@
+<% content_for :title, "Seus pedidos — Feira Solidária" %>
+<h1>Seus pedidos</h1>
+<p class="aviso aviso-alert">São <%= @orders.size %> pedidos, um para cada empreendimento. Abra o WhatsApp de cada um para eles receberem.</p>
+<% @orders.each do |order| %>
+  <section class="grupo-cesta">
+    <h2><%= order.enterprise.name %> — <%= link_to order.code, order_path(order) %></h2>
+    <p><%= order.items.map { |i| "#{i.quantity} × #{i.product_name}" }.join(", ") %> · <span class="preco"><%= order.total %></span></p>
+    <%= render "orders/whatsapp", order:, message: order.whatsapp_message(order_url(order)) %>
+  </section>
+<% end %>

@@ -1,0 +1,26 @@
+<% content_for :title, "Pedidos — Feira Solidária" %>
+<h1>Pedidos</h1>
+<p class="ajuda"><%= Current.enterprise.name %></p>
+
+<%= render "my_enterprise/orders/warnings", warnings: @warnings %>
+
+<% { "Para responder" => @received, "Confirmados — a entregar" => @confirmed, "Encerrados" => @closed }.each do |title, list| %>
+  <h2><%= title %></h2>
+  <% if list.empty? %>
+    <p class="ajuda">Nenhum.</p>
+  <% else %>
+    <ul class="lista-simples">
+      <% list.each do |order| %>
+        <li>
+          <span class="card-texto">
+            <strong><%= link_to "#{order.code} — #{order.buyer_name || 'comprador (dados expirados)'}", my_enterprise_order_path(order) %></strong>
+            <span><%= order.items.map { |i| "#{i.quantity} × #{i.product_name}" }.join(", ") %> · <%= order.total %></span>
+            <span class="ajuda"><%= l(order.created_at, format: :short) %> · <%= t("orders.status.#{order.status}") %><% if order.completed? && order.outcome %> · <%= t("orders.outcome.#{order.outcome}") %><% end %></span>
+            <% if order.received? && !order.routed? %><span class="ajuda">⚠ o comprador ainda não abriu o WhatsApp — veja o pedido aqui</span><% end %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
+<p><%= link_to "Voltar para Minha loja", my_enterprise_path %></p>

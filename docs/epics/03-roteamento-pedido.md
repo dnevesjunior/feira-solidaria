@@ -166,3 +166,45 @@ sentido construí-lo sabendo que o problema é esse.
 ## Ao final do epic
 
 Responder: **quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?**
+
+---
+
+## Encerramento — 2026-08-26 (v1 como PoC)
+
+### Checklist
+
+| Critério | Estado | Prova |
+|---|---|---|
+| Pessoa que nunca viu a plataforma escolhe dois itens, envia, e a loja recebe mensagem legível em < 1 min | ✅ como PoC | `spec/system/pedido_spec.rb`, `spec/requests/orders_spec.rb`: mensagem com código, itens, total, nome, link; ≤ 8 linhas |
+| Loja confirma e conclui pelo celular | ✅ | idem |
+| Itens de duas lojas → dois pedidos; comprador sabe antes | ✅ | aviso na cesta e no envio; 2 pedidos; 2 botões |
+| Nenhuma requisição a gateway — revisão confirma | ✅ | `spec/requests/no_payment_spec.rb` varre `Gemfile.lock` e `app/` |
+| Sem CPF, endereço completo, nascimento | ✅ | campos do formulário e colunas de `orders` |
+| Ultrapassar capacidade gera aviso e não impede | ✅ | pedido criado; painel avisa; comprador não vê; produto não some |
+| Preço no pedido não muda com o preço do produto | ✅ | `spec/models/order_spec.rb` |
+| Expurgo roda e apaga | ✅ | `PurgeBuyerDataJob`: 91 dias fechado → nulos; 89 → mantém; 181 aberto → nulos |
+| Linha de base registrada | ⏳ modelo pronto | `docs/operacao/linha-de-base.md` — preencher com a coordenação antes do piloto |
+
+### Quais decisões deste epic contradizem ou tensionam o `CLAUDE.md`?
+
+1. **"Roteado" não é "recebido"** (ADR 0015). A loja só sabe do pedido se o comprador
+   apertar o botão ou se abrir o painel. Elo mais frágil da v1, visível em vez de
+   escondido.
+2. **Dados do comprador no export** enquanto retidos (ADR 0016): dado pessoal de terceiro
+   saindo em arquivo, com o mesmo prazo de 90 dias.
+3. **Expurgo aos 180 dias em pedido aberto**: o pedido não muda, mas perde o contato.
+4. **`medicao:v1` é o primeiro relatório agregado de vendas.** Sem ranking, sem UI; a
+   revisão 2.6 o corrige ao parear com a capacidade declarada.
+5. **Cesta em cookie de sessão**: estritamente necessário, sem banner. Some ao fechar.
+6. **Rate limit por IP** (10 pedidos/hora): Wi-Fi comunitário pode esbarrar. Operacional.
+7. **Linha de base não preenchida** no PoC: o critério fica aberto até o piloto.
+8. **A vitrine agora tem um botão de compra.** É o momento em que "vitrine" mais se parece
+   com loja. O que a separa de um marketplace é o que **não** tem: pagamento, chat,
+   rating, ranking, funil — e cada ausência tem teste.
+
+### Depois deste epic: parar
+
+A v1 está construída. Próximos passos, nesta ordem: apresentação à coordenadora da feira;
+CEP e consentimento coletivo (revisão 2.7); VPS dedicado (ADR 0003); linha de base;
+teste com pessoas da feira; piloto; **medir**. O Epic 4 só começa com a resposta à
+pergunta: as famílias venderam mais, dentro da capacidade que declararam?

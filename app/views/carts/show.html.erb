@@ -1,0 +1,40 @@
+<% content_for :title, "Sua cesta — Feira Solidária" %>
+<h1>Sua cesta</h1>
+
+<% if cart.empty? %>
+  <p>Sua cesta está vazia. <%= link_to "Ver os produtos da feira", catalog_path %>.</p>
+<% else %>
+  <% if cart.multiple_enterprises? %>
+    <p class="aviso aviso-alert">
+      Você escolheu itens de <strong><%= @groups.size %> empreendimentos</strong>. Isso vira
+      <%= @groups.size %> pedidos separados, um para cada um, com conversas separadas no WhatsApp.
+    </p>
+  <% end %>
+
+  <% @groups.each do |enterprise, lines| %>
+    <section class="grupo-cesta">
+      <h2><%= link_to enterprise.name, enterprise_path(enterprise.slug) %></h2>
+      <ul class="lista-simples">
+        <% lines.each do |line| %>
+          <li class="linha-cesta">
+            <span class="card-texto">
+              <strong><%= line.product.name %></strong>
+              <span><%= line.product.price %> / <%= line.product.sale_unit %></span>
+            </span>
+            <%= form_with url: cart_item_path(line.product), method: :patch, class: "quantidade" do |f| %>
+              <%= f.label :quantity, "Quantidade", class: "visualmente-oculto" %>
+              <%= f.number_field :quantity, value: line.quantity, min: 0, max: 99, inputmode: "numeric" %>
+              <%= f.submit "Atualizar", class: "link" %>
+            <% end %>
+            <span class="preco"><%= line.subtotal %></span>
+            <%= button_to "Remover", cart_item_path(line.product), method: :delete, class: "link" %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <p class="destaque">Total: <%= cart.total %></p>
+  <p class="ajuda">O pagamento é combinado direto com o empreendimento (Pix, dinheiro, na entrega). A feira não cobra nada.</p>
+  <p><%= link_to "Enviar pedido", new_checkout_path, class: "botao" %> <%= link_to "Continuar escolhendo", catalog_path, class: "botao botao-secundario" %></p>
+<% end %>

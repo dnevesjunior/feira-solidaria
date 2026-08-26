@@ -427,6 +427,85 @@ ALTER SEQUENCE public.memberships_id_seq OWNED BY public.memberships.id;
 
 
 --
+-- Name: order_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.order_items (
+    id bigint NOT NULL,
+    order_id bigint NOT NULL,
+    product_id bigint,
+    product_name character varying NOT NULL,
+    sale_unit character varying NOT NULL,
+    unit_price_cents bigint NOT NULL,
+    quantity integer NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: order_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.order_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: order_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.order_items_id_seq OWNED BY public.order_items.id;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.orders (
+    id bigint NOT NULL,
+    enterprise_id bigint NOT NULL,
+    token character varying NOT NULL,
+    status character varying DEFAULT 'received'::character varying NOT NULL,
+    buyer_name character varying,
+    buyer_phone character varying,
+    buyer_note text,
+    total_cents bigint NOT NULL,
+    routed_at timestamp with time zone,
+    confirmed_at timestamp with time zone,
+    closed_at timestamp with time zone,
+    outcome character varying,
+    outcome_note text,
+    buyer_purged_at timestamp with time zone,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
+
+
+--
 -- Name: page_views; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1125,6 +1204,20 @@ ALTER TABLE ONLY public.memberships ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: order_items id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_items ALTER COLUMN id SET DEFAULT nextval('public.order_items_id_seq'::regclass);
+
+
+--
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
+
+
+--
 -- Name: page_views id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1344,6 +1437,22 @@ ALTER TABLE ONLY public.governance_parameters
 
 ALTER TABLE ONLY public.memberships
     ADD CONSTRAINT memberships_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: order_items order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT order_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
 
 
 --
@@ -1622,6 +1731,48 @@ CREATE UNIQUE INDEX index_memberships_on_enterprise_id_and_user_id ON public.mem
 --
 
 CREATE INDEX index_memberships_on_user_id ON public.memberships USING btree (user_id);
+
+
+--
+-- Name: index_order_items_on_order_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_order_items_on_order_id ON public.order_items USING btree (order_id);
+
+
+--
+-- Name: index_order_items_on_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_order_items_on_product_id ON public.order_items USING btree (product_id);
+
+
+--
+-- Name: index_orders_on_closed_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orders_on_closed_at ON public.orders USING btree (closed_at);
+
+
+--
+-- Name: index_orders_on_enterprise_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orders_on_enterprise_id ON public.orders USING btree (enterprise_id);
+
+
+--
+-- Name: index_orders_on_enterprise_id_and_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orders_on_enterprise_id_and_status ON public.orders USING btree (enterprise_id, status);
+
+
+--
+-- Name: index_orders_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_orders_on_token ON public.orders USING btree (token);
 
 
 --
@@ -1926,6 +2077,14 @@ CREATE TRIGGER events_append_only BEFORE DELETE OR UPDATE ON public.events FOR E
 
 
 --
+-- Name: orders fk_rails_1c96142d69; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT fk_rails_1c96142d69 FOREIGN KEY (enterprise_id) REFERENCES public.enterprises(id);
+
+
+--
 -- Name: solid_queue_recurring_executions fk_rails_318a5533ed; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2038,11 +2197,27 @@ ALTER TABLE ONLY public.solid_queue_scheduled_executions
 
 
 --
+-- Name: order_items fk_rails_e3cb28f071; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT fk_rails_e3cb28f071 FOREIGN KEY (order_id) REFERENCES public.orders(id);
+
+
+--
 -- Name: content_images fk_rails_ebbdbc75a4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.content_images
     ADD CONSTRAINT fk_rails_ebbdbc75a4 FOREIGN KEY (enterprise_id) REFERENCES public.enterprises(id);
+
+
+--
+-- Name: order_items fk_rails_f1a29ddd47; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT fk_rails_f1a29ddd47 FOREIGN KEY (product_id) REFERENCES public.products(id) ON DELETE SET NULL;
 
 
 --
@@ -2060,6 +2235,7 @@ ALTER TABLE ONLY public.products
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260826100001'),
 ('20260825200002'),
 ('20260825200001'),
 ('20260825160006'),

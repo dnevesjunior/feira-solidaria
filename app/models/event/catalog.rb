@@ -50,4 +50,15 @@ module Event::Catalog
     description: "Capacidade declarada alterada, com valor anterior e novo. É declaração, não contrato (ADR 0013).",
     payload_keys: %w[quantity_from quantity_to period_from period_to]
   register "product.photo_removed", description: "Foto de produto removida."
+
+  # --- Epic 3 ---------------------------------------------------------------
+  # Nenhum payload leva nome, telefone ou observação do comprador (ADR 0006/0016).
+  register "order.created", description: "Pedido registrado pelo comprador (sem conta).", payload_keys: %w[item_count total_cents]
+  register "order.routed", description: "Comprador abriu o WhatsApp do empreendimento com a mensagem. Não garante leitura (ADR 0015)."
+  register "order.confirmed", description: "Empreendimento confirmou o pedido."
+  register "order.completed", description: "Empreendimento concluiu o pedido.", payload_keys: %w[outcome]
+  register "order.outcome_recorded", description: "Desfecho registrado: pago e entregue — sim, parcial ou não. Sem consequência automática.", payload_keys: %w[outcome]
+  register "order.refused", description: "Empreendimento recusou o pedido."
+  register "order.cancelled", description: "Pedido cancelado pelo empreendimento."
+  register "order.buyer_data_purged", description: "Nome, telefone e observação do comprador apagados por retenção (ADR 0016)."
 end

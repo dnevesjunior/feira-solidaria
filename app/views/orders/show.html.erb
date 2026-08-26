@@ -1,0 +1,20 @@
+<% content_for :title, "Pedido #{@order.code} — Feira Solidária" %>
+<h1>Pedido <%= @order.code %></h1>
+<p class="destaque"><%= t("orders.status.#{@order.status}") %></p>
+<p>Para <strong><%= link_to @order.enterprise.name, enterprise_path(@order.enterprise.slug) %></strong></p>
+
+<% if @order.received? && !@order.routed? %>
+  <p class="aviso aviso-alert">A loja recebe o pedido pelo WhatsApp. Toque no botão para abrir a conversa com a mensagem pronta.</p>
+<% end %>
+<% if @order.open? %>
+  <%= render "orders/whatsapp", order: @order, message: @message %>
+<% end %>
+
+<ul class="lista-simples">
+  <% @order.items.each do |item| %>
+    <li><%= item.quantity %> × <%= item.product_name %> (<%= item.unit_price %>/<%= item.sale_unit %>) <span class="preco"><%= item.subtotal %></span></li>
+  <% end %>
+</ul>
+<p class="destaque">Total: <%= @order.total %></p>
+<% if @order.buyer_note.present? %><p>Observação: <%= @order.buyer_note %></p><% end %>
+<p class="ajuda">Guarde este endereço para acompanhar o pedido. Ele também está na mensagem do WhatsApp.</p>

@@ -1,0 +1,7 @@
+<%# Botão que abre o WhatsApp da loja com a mensagem; o toque registra "roteado". %>
+<%= button_to "Abrir no WhatsApp", order_whatsapp_path(order), class: "botao botao-whatsapp", form: { data: { turbo: false } } %>
+<details class="detalhes">
+  <summary>Se o WhatsApp não abrir, copie a mensagem</summary>
+  <textarea readonly rows="8" class="mensagem"><%= message.to_s %></textarea>
+  <p class="ajuda">Envie para <%= PhoneNumber.format(order.enterprise.whatsapp) %>.</p>
+</details>

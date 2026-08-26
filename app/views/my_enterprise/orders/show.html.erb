@@ -1,0 +1,53 @@
+<% content_for :title, "Pedido #{@order.code} — Feira Solidária" %>
+<h1>Pedido <%= @order.code %></h1>
+<p class="destaque"><%= t("orders.status.#{@order.status}") %></p>
+<%= render "my_enterprise/orders/warnings", warnings: @warnings %>
+
+<dl class="dados">
+  <dt>Quem pediu</dt>
+  <dd>
+    <% if @order.buyer_purged_at %>
+      dados do comprador expirados (guardamos por 90 dias)
+    <% else %>
+      <%= @order.buyer_name %> — <%= link_to PhoneNumber.format(@order.buyer_phone), "https://wa.me/#{@order.buyer_phone.delete('+')}", rel: "noopener" %>
+    <% end %>
+  </dd>
+  <dt>Quando</dt><dd><%= l(@order.created_at, format: :long) %><% unless @order.routed? %> · <span class="ajuda">o comprador não abriu o WhatsApp</span><% end %></dd>
+  <% if @order.buyer_note.present? %><dt>Observação</dt><dd><%= @order.buyer_note %></dd><% end %>
+</dl>
+
+<ul class="lista-simples">
+  <% @order.items.each do |item| %>
+    <li><%= item.quantity %> × <%= item.product_name %> (<%= item.unit_price %>/<%= item.sale_unit %>) <span class="preco"><%= item.subtotal %></span></li>
+  <% end %>
+</ul>
+<p class="destaque">Total: <%= @order.total %></p>
+
+<% if @order.received? %>
+  <nav class="acoes">
+    <%= button_to "Confirmar pedido", confirm_my_enterprise_order_path(@order), class: "botao" %>
+    <%= button_to "Recusar", refuse_my_enterprise_order_path(@order), class: "botao botao-secundario", data: { turbo_confirm: "Recusar este pedido?" } %>
+  </nav>
+<% end %>
+
+<% if @order.open? %>
+  <h2>Concluir</h2>
+  <p class="ajuda">Quando entregar, marque como ficou. Isso é só para o seu registro — ninguém cobra nada.</p>
+  <%= form_with url: complete_my_enterprise_order_path(@order), class: "formulario" do |form| %>
+    <fieldset class="campo">
+      <legend>Foi pago e entregue?</legend>
+      <% Order::OUTCOMES.each do |o| %>
+        <label class="opcao"><%= form.radio_button :outcome, o, required: true %> <%= t("orders.outcome.#{o}") %></label>
+      <% end %>
+    </fieldset>
+    <div class="campo">
+      <%= form.label :outcome_note, "Observação (opcional)" %>
+      <%= form.text_field :outcome_note, maxlength: 300 %>
+    </div>
+    <%= form.submit "Concluir pedido", class: "botao" %>
+  <% end %>
+  <p><%= button_to "Cancelar pedido", cancel_my_enterprise_order_path(@order), class: "link", data: { turbo_confirm: "Cancelar este pedido?" } %></p>
+<% elsif @order.completed? %>
+  <p>Desfecho: <strong><%= t("orders.outcome.#{@order.outcome}") %></strong><% if @order.outcome_note.present? %> — <%= @order.outcome_note %><% end %></p>
+<% end %>
+<p><%= link_to "Voltar para os pedidos", my_enterprise_orders_path %></p>

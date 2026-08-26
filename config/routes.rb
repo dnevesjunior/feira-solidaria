@@ -13,6 +13,16 @@ Rails.application.routes.draw do
   get "produtos", to: "catalog#index", as: :catalog
   get "capacidade-da-rede", to: "network_capacity#index", as: :network_capacity
 
+  # Cesta e pedido (Epic 3): sem login, sem pagamento.
+  resource :cart, path: "cesta", only: %i[ show ] do
+    resources :items, path: "itens", only: %i[ create update destroy ], controller: "cart_items"
+  end
+  get "cesta/enviar", to: "checkouts#new", as: :new_checkout
+  post "cesta/enviar", to: "checkouts#create", as: :checkout
+  get "pedidos/enviados", to: "orders#sent", as: :sent_orders
+  get "pedidos/:token", to: "orders#show", as: :order, constraints: { token: /[1-9A-HJ-NP-Za-km-z]{20}/ }
+  post "pedidos/:token/whatsapp", to: "orders#whatsapp", as: :order_whatsapp, constraints: { token: /[1-9A-HJ-NP-Za-km-z]{20}/ }
+
   # Minha loja: tudo escopado por Current.enterprise (ADR 0005).
   scope path: "minha-loja", module: :my_enterprise, as: :my_enterprise do
     get "/", to: "enterprises#show", as: ""
@@ -35,6 +45,14 @@ Rails.application.routes.draw do
         post :unpause, path: "despausar"
       end
       resources :photos, path: "fotos", only: %i[ destroy ], controller: "product_photos"
+    end
+    resources :orders, path: "pedidos", only: %i[ index show ] do
+      member do
+        post :confirm, path: "confirmar"
+        post :complete, path: "concluir"
+        post :refuse, path: "recusar"
+        post :cancel, path: "cancelar"
+      end
     end
   end
 

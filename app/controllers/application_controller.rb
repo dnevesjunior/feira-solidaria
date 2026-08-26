@@ -16,8 +16,16 @@ class ApplicationController < ActionController::Base
   def count_page_view
     return unless request.get? && response.status == 200 && response.media_type == "text/html"
     return if PageView.bot?(request.user_agent)
-    PageView.count!(request.path)
+    PageView.count!(telemetry_path)
   rescue StandardError => e
     Rails.error.report(e, handled: true, severity: :warning)
   end
+
+  # O token do pedido é quase-identificador: nunca vai para a telemetria (ADR 0016).
+  def telemetry_path
+    request.path.sub(%r{\A/pedidos/[^/]+}, "/pedidos/:token")
+  end
+
+  helper_method :cart
+  def cart = @cart ||= Cart.new(session)
 end

@@ -149,3 +149,17 @@ button.link {
 .detalhes summary { cursor: pointer; font-weight: 600; min-height: 48px; display: flex; align-items: center; }
 select { font-size: 1.125rem; padding: 0.75rem; border: 2px solid var(--borda); border-radius: 6px; background: #fff; width: 100%; }
 .nav-produtos { margin: 1rem 0; }
+
+/* ---------- Epic 3: cesta e pedidos ---------- */
+.botao-pequeno { padding: 0.5rem 0.75rem; font-size: 1rem; margin-top: 0.25rem; }
+.botao-whatsapp { background: #128c4a; font-size: 1.25rem; width: 100%; text-align: center; }
+.cesta-link { font-weight: 700; }
+.grupo-cesta { margin: 1rem 0; }
+.linha-cesta { align-items: center; }
+.quantidade { display: flex; gap: 0.25rem; align-items: center; }
+.quantidade input { width: 4.5rem; padding: 0.5rem; font-size: 1.125rem; border: 2px solid var(--borda); border-radius: 6px; }
+.mensagem { width: 100%; font: inherit; font-size: 1rem; padding: 0.5rem; border: 2px solid var(--borda); border-radius: 6px; }
+fieldset.campo { border: 0; padding: 0; }
+fieldset.campo legend { font-weight: 600; margin-bottom: 0.25rem; }
+.opcao { display: flex; align-items: center; gap: 0.5rem; min-height: 48px; }
+.opcao input { width: 1.5rem; height: 1.5rem; }

@@ -1,0 +1,6 @@
+<% warnings.each do |w| %>
+  <p class="aviso aviso-alert">
+    Você tem <strong><%= w.open_quantity %></strong> de «<%= w.product.name %>» em pedidos abertos nesta semana e
+    declarou mais ou menos <strong><%= w.weekly_capacity %> por semana</strong>. Só um aviso: quem decide aceitar é você.
+  </p>
+<% end %>

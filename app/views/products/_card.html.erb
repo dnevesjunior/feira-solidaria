@@ -12,6 +12,8 @@
     <% if product.lead_time_days.present? %><span class="ajuda">Prazo: <%= product.lead_time_days %> <%= product.lead_time_days == 1 ? "dia" : "dias" %></span><% end %>
     <% if link %>
       <%= link_to product.enterprise.name, enterprise_path(product.enterprise.slug, anchor: "produto-#{product.id}"), class: "card-loja" %>
+    <% elsif local_assigns.fetch(:orderable, false) %>
+      <%= button_to "Adicionar à cesta", cart_items_path(product_id: product.id), class: "botao botao-secundario botao-pequeno" %>
     <% end %>
   </span>
 </li>

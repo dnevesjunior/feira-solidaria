@@ -1,0 +1,11 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Redirect",
+      "fingerprint": "eb599a2116a9698c9b574ba0fd4a7f4f4bf778019dda2edac6261b4ed63aaf73",
+      "note": "Redirecionamento intencional para wa.me (ADR 0015). O host é fixo; o número vem do WhatsApp do empreendimento (E.164 validado por PhoneNumber) e o texto é gerado pela aplicação (Order::WhatsappMessage), nunca de params."
+    }
+  ],
+  "updated": "2026-08-26",
+  "brakeman_version": "7"
+}

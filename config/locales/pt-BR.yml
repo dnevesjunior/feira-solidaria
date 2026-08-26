@@ -18,6 +18,27 @@ pt-BR:
     removed: "Pessoa removida."
   fair_events:
     saved: "Próxima feira salva."
+  cart:
+    added: "%{name} foi para a sua cesta."
+    removed: "Item removido."
+    empty: "Sua cesta está vazia."
+  orders:
+    sent: "Pedido enviado! Agora abra o WhatsApp para a loja receber."
+    status:
+      received: "Recebido — aguardando a loja confirmar"
+      confirmed: "Confirmado pela loja"
+      completed: "Concluído"
+      refused: "Recusado pela loja"
+      cancelled: "Cancelado"
+    outcome:
+      full: "Pago e entregue"
+      partial: "Parcialmente"
+      none: "Não foi pago/entregue"
+    confirmed: "Pedido confirmado."
+    completed: "Pedido concluído."
+    refused: "Pedido recusado."
+    cancelled: "Pedido cancelado."
+    invalid_transition: "Esse pedido não pode mudar para esse estado."
   products:
     created: "Produto salvo como rascunho. Publique quando quiser que apareça na sua página."
     saved: "Produto salvo."
@@ -65,6 +86,9 @@ pt-BR:
       category:
         one: "Categoria"
         other: "Categorias"
+      order:
+        one: "Pedido"
+        other: "Pedidos"
     attributes:
       enterprise:
         name: "Nome do empreendimento"
@@ -89,6 +113,11 @@ pt-BR:
         capacity_period: "Período"
         lead_time_days: "Prazo de entrega"
         category: "Categoria"
+      order:
+        buyer_name: "Seu nome"
+        buyer_phone: "Seu WhatsApp"
+        buyer_note: "Observação"
+        total_cents: "Total"
       fair_event:
         starts_at: "Início"
         ends_at: "Fim"
