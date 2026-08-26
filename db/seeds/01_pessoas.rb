@@ -1,6 +1,8 @@
 # Pessoas fictícias da rede. Telefones no bloco 13 90000-00NN não existem.
-# Senha de desenvolvimento para todas: feira1234
-SENHA_DEV = "feira1234"
+# Senha de desenvolvimento para todas: feira1234. Em produção (demonstração),
+# senha aleatória impressa uma vez — a senha do repositório não pode abrir
+# conta em produção.
+SENHA_DEV = Rails.env.production? ? SecureRandom.alphanumeric(12) : "feira1234"
 
 PESSOAS = [
   { name: "Coordenação da Feira", phone: "13 90000-0000" },
